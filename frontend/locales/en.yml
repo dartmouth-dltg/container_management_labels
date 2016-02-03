@@ -1,0 +1,13 @@
+en:
+  dartmouth_top_container:
+    _frontend:
+      bulk_operations:
+        print_labels: Print Labels
+        print_labels_help: Print labels for all selected containers.
+        print_n_labels: "Print labels for %{n} containers"
+        label_page_title: ArchivesSpace Container Labels
+        label_type_label: Label Type
+        label_type_local: Local Storage Label
+        label_type_rm: Records Management Storage Label
+        indicator_search_hint: Space separated list or a range like this [104493 TO 104495]
+    archives_box: Get Next Archives Box
