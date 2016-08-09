@@ -42,8 +42,8 @@ $(function() {
  if (typeof BulkContainerSearch == 'function') {
 		dartmouth_bulkContainerLabels = Object.create(BulkContainerSearch.prototype);
 		
-		dartmouth_bulkContainerLabels.$search_form = $('#bulk-operation-form');
-		dartmouth_bulkContainerLabels.$results_container = $('#bulk-operation-results');
+		dartmouth_bulkContainerLabels.$search_form = $('#bulk_operation_form');
+		dartmouth_bulkContainerLabels.$results_container = $('#bulk_operation_results');
 		dartmouth_bulkContainerLabels.$toolbar = $('.record-toolbar.bulk-operation-toolbar');
 		
 		new BulkActionPrintLabels(dartmouth_bulkContainerLabels);
