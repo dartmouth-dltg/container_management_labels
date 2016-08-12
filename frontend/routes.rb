@@ -1,3 +1,3 @@
 ArchivesSpace::Application.routes.draw do
-  match('/plugins/dartmouth_top_containers/bulk_operations/print_labels' => 'dartmouth_top_containers#print_labels', :via => [:post])
+  match('/plugins/top_containers_labels/print_labels' => 'top_containers_labels#print_labels', :via => [:post])
 end

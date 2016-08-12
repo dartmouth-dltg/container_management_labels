@@ -1,13 +1,14 @@
 require 'uri'
 
-class DartmouthTopContainersController < TopContainersController
+class TopContainersLabelsController < TopContainersController
 
   set_access_control  "view_repository" => [:show, :typeahead, :bulk_operations_browse, :print_labels]
  
   def print_labels
-    post_uri = "/repositories/#{session[:repo_id]}/dartmouth_top_containers/bulk/labels"
+    post_uri = "/repositories/#{session[:repo_id]}/top_containers_labels/print_labels"
+    
     response = JSONModel::HTTP.post_form(URI(post_uri), {"record_uris[]" => Array(params[:record_uris])})
-    logger.debug('#{reponse}')
+    #logger.debug("print_labels: #{response.body.inspect}")
     
     results = ASUtils.json_parse(response.body)
 

@@ -1,39 +1,29 @@
 <%
-  columns = 4
-  rows = 6
-  column_width = "2.32in" # these dimensions may be more appropriate expressed in mm, ie 59mm and 102mm
-  row_height = "4in"
-  page_break = "1in" # not implemented
-
-  rms_source = AppConfig[:container_management_rms_source]
+  page_sizing = {
+    "dymo-30256" => {"size" => "59mm 102mm", "margin" => "5mm 1mm 5mm 1mm"},
+    "avery-5163" => {"size" => "letter", "margin" => "0.5in 0.125in"}
+    }
 %>
-
 <html>
   <head>
-    <title><%= I18n.t("top_container._frontend.bulk_operations.label_page_title") %></title>
+    <title><%= I18n.t("top_container_labels._frontend.bulk_operations.label_page_title") %></title>
     <link href="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels.css" %>" media="all" rel="stylesheet" type="text/css"/>
     <script src="<%= "#{AppConfig[:frontend_prefix]}assets/jquery.js?body=1" %>" type="text/javascript"></script>
-    <script src="<%= "#{AppConfig[:frontend_prefix]}assets/jquery-barcode.min.js" %>"></script>
-    <script src="<%= "#{AppConfig[:frontend_prefix]}assets/generate_barcodes.js" %>"></script>
-    <script src="<%= "#{AppConfig[:frontend_prefix]}assets/chrome-labels.js" %>"></script>
-
+    <script src="<%= "#{AppConfig[:frontend_prefix]}assets/jquery-barcode.min.js" %>" type="text/javascript"></script>
+    <script src="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels.js" %>" type="text/javascript"></script>
   </head>
 
 <body>
-  <div id="labels_to_print" class="label-sheet">
+  <div class="labels">
     <% sorted_labels = [] %>
 
     <% labels.each do |label| %>
       <% 
         loc = label['container_locations'].select { |cl| cl['status'] == 'current' }.first
         loc = loc ? loc['_resolved'] : {}
-        
-        # Records Management Locations only need the first coordinate, but we'll need the area as a separate piece
-        rm_area = loc.empty? ? 'Unknown' : ['area'].map {|fld| loc[fld]}.compact.join('')
-        rm_loc = loc.empty? ? 'Unknown' : ['coordinate_1_indicator'].map {|fld| loc[fld]}.compact.join('')
-        
+                
         # Local locations need a bunch of location information concatenated
-        loc = loc.empty? ? 'Unknown' : ['area', 'coordinate_1_indicator', 'coordinate_2_indicator', 'coordinate_3_indicator'].map {|fld| loc[fld]}.compact.join(' ')
+        #loc = loc.empty? ? '' : ['building', 'area', 'coordinate_1_indicator', 'coordinate_2_indicator', 'coordinate_3_indicator'].map {|fld| loc[fld]}.compact.join(' ')
         
         indicator = label['indicator']
         
@@ -41,76 +31,44 @@
         
         resource = label['collection'].empty? ? {} : label['collection'].first
 
-        series = label['archival_object']['series']
-
         archival_record = label['archival_object']['_resolved']
 
         date = archival_record['dates'].empty? ? {} : archival_record['dates'].first
         date = date['expression'] ? date['expression'] : [date['begin'], date['end']].compact.join(' - ')
 
-        note = archival_record['notes'].empty? ? nil : archival_record['notes'].select{|n| n['type'] == 'scopecontent'}.first
-        note = note.nil? ? "" : note['subnotes'].first['content']
-
-        rm = archival_record['external_ids']
-        rm = rm.empty? ? nil : archival_record['external_ids'].select{|e| e['source'] == rms_source}.first
-        
-        # Remove the leading "box_" from the RM ID as we don't need to display that
-        records_management_id = rm.nil? ? "--" : rm['external_id'].sub(/^box_/,'')
-        
-        sorted_labels.push({"loc"=>loc,"rm_area"=>rm_area,"rm_loc"=>rm_loc,"indicator"=>indicator,"barcode"=>barcode,"resource"=>resource,"series"=>series,"archival_record"=>archival_record,"date"=>date,"note"=>note,"rm"=>rm,"records_management_id"=>records_management_id})
+        title = archival_record['title'].empty? ? nil : archival_record['title']
+        #note = note.nil? ? "" : note['subnotes'].first['content']
+     
+        sorted_labels.push({"loc"=>loc,"indicator"=>indicator,"barcode"=>barcode,"resource"=>resource,"archival_record"=>archival_record,"date"=>date,"title"=>title})
       %>
-    <% end %>
-    <% if params['label_type'] == 'rm' %>
-      <% sorted_labels.sort! { |a,b| a['rm_loc'].to_i <=> b['rm_loc'].to_i } %>
     <% end %>
 
     <% sorted_labels.each do |label| %>
-      <div class="label-sheet-row">
-        <div class="label-sheet-cell">
-          <div class="box-label">
-            <% if params['label_type'] == 'rm' %>
-              <div class="rm">
-                <div class="label-location-header">Location</div>
-                <div class="label-location"><%= label['rm_area'] %></div>
-                <div class="label-divider"></div>
-                <div class="label-resource-id"><%= label['resource']['identifier'] %></div>
-                <div class="label-indicator"><%= label['indicator'] %></div>
-                <div class="label-resource-title"><%= label['resource']['display_string'] %></div>
-                <div class="label-series-title-rm"><%= label['series'][0,25] %></div>
-                <div class="label-divider"></div>
-                <div class="label-description-rm"><%= label['note'][0,50]  %></div>
-                <div class="label-divider"></div>
-                <div class="label-records-management-id-header">RM Box ID</div>
-                <div class="label-records-management-id"><%= label['records_management_id'] %></div>
-                <div class="label-divider"></div>
-                <div class="label-records-management-location-header">RM Box Location</div>
-                <div class="label-records-management-location"><%= label['rm_loc'] %></div>
-                <div class="label-barcode" data="<%= label['barcode'] %>"></div>
-              </div>
-  
-             <% else %>
-  
-              <div class="label-location-header">Location</div>
-              <div class="label-location"><%= label['loc'] %></div>
-              <div class="label-divider"></div>
-              <div class="label-resource-id"><%= label['resource']['identifier'] %></div>
-              <div class="label-indicator"><%= label['indicator'] %></div>
-              <div class="label-resource-title"><%= label['resource']['display_string'] %></div>
-              <div class="label-series-title"><%= label['series'][0,50] %></div>
-              <div class="label-divider"></div>
-              <div class="label-description"><%= label['note'][0,75]  %></div>
-              <div class="label-date">
-                <%= label['date']  %>
-              </div>
-              <div class="label-barcode" data="<%= label['barcode'] %>"></div>
-  
-            <% end %>
+      <div class="label <%= params['label_type'] %>">
+
+          <div class="label-resource-id"><%= label['resource']['identifier'] %></div>
+          <div class="label-resource-title"><%= label['resource']['display_string'] %></div>
+          <div class="label-description"><%= label['title'][0,75]  %></div>
+          <div class="label-date">
+            <%= label['date']  %>
           </div>
-        </div>
+          <div class="label-indicator"><%= label['indicator'] %></div>
+          <div class="label-barcode" data="<%= label['barcode'] %>"></div>
+  
+          <% unless label['loc'].empty? %>
+            <div class="label-divider"></div>
+            <div class="label-location"><%= label['loc']['title'] %></div>
+            <div class="label-barcode" data="<%= label['loc']['barcode'] %>"></div>
+          <% end %>
       </div>
     <% end %>
 
   </div>
-
+<style type="text/css">
+  @page {
+    size: <%= page_sizing[params['label_type']]['size'] %>;
+    margin: <%= page_sizing[params['label_type']]['margin'] %>;
+  }
+</style>
 </body>
 </html>

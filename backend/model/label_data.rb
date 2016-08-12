@@ -26,9 +26,8 @@ class LabelData
       ao_ids.each do |ao_id|
         ao = fetch_archival_object(ao_id)
         tc = fetch_top_container(top_container_id)
-        series = series_title_for(ao_id)
 
-        labels << tc.merge({'archival_object' => {'ref' => ao['uri'], 'series' => series, '_resolved' => ao}})
+        labels << tc.merge({'archival_object' => {'ref' => ao['uri'], '_resolved' => ao}})
       end
     end
 
@@ -39,14 +38,12 @@ class LabelData
   private
 
   # Returns a hash like {123 => 456}, meaning "Top Container 123 links to Archival Object 456"
-  # Only includes the links to Archival Object box records
   def calculate_top_container_linkages(ids)
     result = {}
 
     TopContainer.linked_instance_ds.
       join(:archival_object, :id => :instance__archival_object_id).
       filter(:top_container__id => ids).
-      filter(:archival_object__other_level => 'box').
       select(Sequel.as(:archival_object__id, :ao_id),
              Sequel.as(:top_container__id, :top_container_id)).each do |row|
 
@@ -64,8 +61,6 @@ class LabelData
     # Our JSONModel(:archival_object) records (keyed on ID)
     @ao_json_records = Hash[ArchivalObject.sequel_to_jsonmodel(ao_list).map {|ao| [ao.id, ao.to_hash(:trusted)]}]
 
-    # And their series display strings
-    @ao_series_titles = Hash[ao_list.map {|ao| [ao.id, TopContainer.find_title_for(ao.series || ao)]}]
   end
 
 
@@ -74,11 +69,6 @@ class LabelData
     top_container_json_records = Hash[TopContainer.sequel_to_jsonmodel(top_container_list).map {|tc| [tc.id, tc.to_hash(:trusted)]}]
 
     @top_container_json_records = URIResolver.resolve_references(top_container_json_records, ['container_locations'], {})
-  end
-
-
-  def series_title_for(ao_id)
-    @ao_series_titles.fetch(ao_id)
   end
 
 

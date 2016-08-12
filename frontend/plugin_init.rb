@@ -20,7 +20,7 @@ Rails.application.config.after_initialize do
 
       # Add our location-specific templates to shared/templates
       if options[:partial] == "shared/templates"
-        result += render(context, options.merge(:partial => "labels/dartmouth_bulk_action_templates"), nil)
+        result += render(context, options.merge(:partial => "labels/labels_bulk_action_templates"), nil)
       end
 
       result
