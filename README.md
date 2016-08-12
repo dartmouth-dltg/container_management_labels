@@ -19,11 +19,14 @@ including an entry such as:
 ## Modifying
 
 The labels that are available to print from within the browser are defined in four (4) files:
-     /frontend/assets/container_labels.css
+
+/frontend/assets/container_labels.css
+
      This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
      of using the label name as a namespace, eg ".dymo-30256"
     
-    /frontend/views/labels/_bulk_action_labels.html.erb
+/frontend/views/labels/_bulk_action_labels.html.erb
+
     The page sizing for the @page CSS directive is defined for each type at the beginning of this file.
     The definition is in the form of a hash:
     page_sizing = {
@@ -32,10 +35,12 @@ The labels that are available to print from within the browser are defined in fo
     }
     The @page definitions are written on load depending on the label type selected.
     
-    /frontend/views/labels/_labels_bulk_action_templates.html.erb
+/frontend/views/labels/_labels_bulk_action_templates.html.erb
+
     Each type of label must be included here as a select option.
     
-    /locales/en.yml
+/locales/en.yml
+
     The translations for each label are defined here. For example.
         label_type_dymo_30256: Dymo-30256
 
