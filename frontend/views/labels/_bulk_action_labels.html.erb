@@ -21,25 +21,14 @@
       <% 
         loc = label['container_locations'].select { |cl| cl['status'] == 'current' }.first
         loc = loc ? loc['_resolved'] : {}
-                
-        # Local locations need a bunch of location information concatenated
-        #loc = loc.empty? ? '' : ['building', 'area', 'coordinate_1_indicator', 'coordinate_2_indicator', 'coordinate_3_indicator'].map {|fld| loc[fld]}.compact.join(' ')
-        
+                        
         indicator = label['indicator']
         
         barcode = label['barcode']
         
         resource = label['collection'].empty? ? {} : label['collection'].first
 
-        archival_record = label['archival_object']['_resolved']
-
-        date = archival_record['dates'].empty? ? {} : archival_record['dates'].first
-        date = date['expression'] ? date['expression'] : [date['begin'], date['end']].compact.join(' - ')
-
-        title = archival_record['title'].empty? ? nil : archival_record['title']
-        #note = note.nil? ? "" : note['subnotes'].first['content']
-     
-        sorted_labels.push({"loc"=>loc,"indicator"=>indicator,"barcode"=>barcode,"resource"=>resource,"archival_record"=>archival_record,"date"=>date,"title"=>title})
+        sorted_labels.push({"loc"=>loc,"indicator"=>indicator,"barcode"=>barcode,"resource"=>resource})
       %>
     <% end %>
 
@@ -48,10 +37,7 @@
 
           <div class="label-resource-id"><%= label['resource']['identifier'] %></div>
           <div class="label-resource-title"><%= label['resource']['display_string'] %></div>
-          <div class="label-description"><%= label['title'][0,75]  %></div>
-          <div class="label-date">
-            <%= label['date']  %>
-          </div>
+
           <div class="label-indicator"><%= label['indicator'] %></div>
           <div class="label-barcode" data="<%= label['barcode'] %>"></div>
   

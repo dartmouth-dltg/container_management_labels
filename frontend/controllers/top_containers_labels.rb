@@ -8,7 +8,6 @@ class TopContainersLabelsController < TopContainersController
     post_uri = "/repositories/#{session[:repo_id]}/top_containers_labels/print_labels"
     
     response = JSONModel::HTTP.post_form(URI(post_uri), {"record_uris[]" => Array(params[:record_uris])})
-    #logger.debug("print_labels: #{response.body.inspect}")
     
     results = ASUtils.json_parse(response.body)
 
