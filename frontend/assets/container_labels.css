@@ -180,11 +180,17 @@ div.label .label-barcode > div{
     margin: 2px auto;
     max-height: 50%;
 }
+div.label .label-barcode div:last-of-type {
+    clear:none !important;
+}
+div.label:last-of-type {
+    page-break-after: avoid !important;
+}
 /* label specific sizing and layout */
 /* single thermal label on a spool */
 .dymo-30256{
-    height: 102mm;
-    width: 59mm;
+    height: 90mm;
+    width: 57mm;
 }
 /* standard 2x4 with 10 labels per sheet in portrait mode */
 .avery-5163{
@@ -201,15 +207,41 @@ div.label .label-barcode > div{
     padding-right: 0.125in;
 }
 @media print{
+    .label:last-of-type {
+        page-break-after: avoid !important;
+    }
 /*************************************************************
         set when the page breaks should occur for each label type 
         notice that the dymo is for every label
-        while the avery is after every 1
+        while the avery is after every 10th label
+        
+        Note also that different browsers scale the printing differently
+        despite what *should* happen.
      *************************************************************/
     .dymo-30256{
         page-break-after: always;
     }
     .avery-5163:nth-of-type(10){
         page-break-after: always;
+    }
+    .dymo-30256.chrome-label{
+        page-break-after: auto;
+    }
+    .labels.safari-label{
+        margin-top:.25in !important; 
+    }
+    .labels.chrome-label{
+        margin-top:0in !important; 
+    }
+    .avery-5163.safari-label{
+        width:3.6in !important;
+        height: 1.9in !important;
+    }
+    .avery-5163.chrome-label{
+        width:3.875in !important; 
+        height: 2in !important;
+    }
+    .avery-5163.chrome-label:nth-of-type(10){
+        page-break-after: auto;
     }
 }

@@ -12,7 +12,17 @@ Rails.application.config.after_initialize do
          "Please check your configuration and try again.")
     raise "Plugin dependency not satisfied - container_management_labels requires container_management"
   end
-
+  
+  # check to see if any page sizes have been defined
+  unless AppConfig.has_key?(:container_management_labels_pagesize)
+    $stderr.puts "WARNING: container_management_labels plugin has no page sizes defined. " +
+    "Printing may not work as expected and will default to a standard letter size."
+    AppConfig[:container_management_labels_pagesize] = {}
+  end
+  
+  # add the default page sizing in any case
+  AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
+  
   ActionView::PartialRenderer.class_eval do
     alias_method :render_labels, :render
     def render(context, options, block)

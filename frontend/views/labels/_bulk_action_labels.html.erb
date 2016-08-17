@@ -1,9 +1,3 @@
-<%
-  page_sizing = {
-    "dymo-30256" => {"size" => "59mm 102mm", "margin" => "5mm 1mm 5mm 1mm"},
-    "avery-5163" => {"size" => "letter", "margin" => "0.5in 0.125in"}
-    }
-%>
 <html>
   <head>
     <title><%= I18n.t("top_container_labels._frontend.bulk_operations.label_page_title") %></title>
@@ -24,7 +18,7 @@
                         
         indicator = label['indicator']
         
-        barcode = label['barcode']
+        barcode = label['barcode'] ? label['barcode'] : ''
         
         resource = label['collection'].empty? ? {} : label['collection'].first
 
@@ -43,18 +37,26 @@
   
           <% unless label['loc'].empty? %>
             <div class="label-divider"></div>
-            <div class="label-location"><%= label['loc']['title'] %></div>
-            <div class="label-barcode" data="<%= label['loc']['barcode'] %>"></div>
+            <div class="label-location"><%= label['loc']['title'] rescue '' %></div>
+            <div class="label-barcode" data="<%= label['loc']['barcode'] rescue '' %>"></div>
           <% end %>
       </div>
     <% end %>
 
   </div>
+<!--<%
+  unless AppConfig[:container_management_labels_pagesize] && AppConfig[:container_management_labels_pagesize][params['label_type']] && AppConfig[:container_management_labels_pagesize][params['label_type']]['size'] && AppConfig[:container_management_labels_pagesize][params['label_type']] && AppConfig[:container_management_labels_pagesize][params['label_type']]['margin']
+    params['label_type'] = "default"
+  end
+ %>-->
+<script type="text/javascript">
+  var barcodeType = "<%= params['barcode_type'] %>";
+</script>
 <style type="text/css">
-  @page {
-    size: <%= page_sizing[params['label_type']]['size'] %>;
-    margin: <%= page_sizing[params['label_type']]['margin'] %>;
-  }
+    @page {
+      size: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['size'] rescue AppConfig[:container_management_labels_pagesize]['default']['size'] %>;
+      margin: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['margin']  rescue AppConfig[:container_management_labels_pagesize]['default']['margin']%>;
+    }
 </style>
 </body>
 </html>

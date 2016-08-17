@@ -8,11 +8,15 @@ $(document).ready(function() {
 	
 	var isSafari = navigator.userAgent.toLowerCase().indexOf("safari") > -1;
 	
+	if (typeof barcodeType == 'undefined') {
+		barcodeType = "codabar";
+	}
+	
 	if (isSafari) {
-		$(".label").addClass("safari-sheet-cell");
+		$(".label, .labels").addClass("safari-label");
 	}
 	if (isChrome) {
-		$(".label").addClass("chrome-sheet-cell");
+		$(".label, .labels").addClass("chrome-label");
 	}
 	$(".labels .label").last().css("page-break-after","avoid");
 });
@@ -21,7 +25,7 @@ $(window).on("load", function() {
 // convert the barcode data attribute to real barcodes
 	$(document).find(".label-barcode").each(function() {
 		if (this.getAttribute("data")) {
-		    $(this).barcode(this.getAttribute("data"), "codabar", {barHeight:30});
+		    $(this).barcode(this.getAttribute("data"), barcodeType, {barHeight:30});
 		}
 	});
 });

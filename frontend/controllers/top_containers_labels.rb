@@ -37,7 +37,7 @@ class TopContainersController
       end
       
       #convert the range into a set of indicators since indicators are defined as strings and we need exact matches
-      if params[:indicator].include? "TO"
+      if params[:indicator] =~ /to/i
         range = params[:indicator].split
           .find_all{|e| e[/\d+/]}
           .each{|e| e.gsub!(/\[|\]/,'').to_i}
