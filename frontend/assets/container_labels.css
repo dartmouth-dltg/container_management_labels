@@ -145,9 +145,13 @@ table{
 }
 body{
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+}
+.label {
+    overflow: scroll;
 }
 div.label > div{
-    font-size: 10px;
+    font-size: 90%;
     height: auto;
     margin: 0 auto;
     text-align: center;
@@ -155,13 +159,13 @@ div.label > div{
 }
 div.label .label-resource-id{
     font-weight: 500;
-    font-size: 18px;
+    font-size: 140%;
 }
 div.label .label-indicator{
     border-style: solid;
     border-width: 1px;
     font-weight: 900;
-    font-size: 16px;
+    font-size: 120%;
     max-height: 100px;
     padding: 2px;
 }

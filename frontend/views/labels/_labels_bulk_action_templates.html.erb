@@ -13,37 +13,65 @@
                 {/for}
             </ul>
         </div>
-
+        <div class="form-group well">
+          <div class="col-sm-12">
+            <p>Select the fields to include on the label(s). (<a href="#" id="check-all-label-fields">Select all</a>)<p>
+            <p>The <strong><%= I18n.t("top_container_labels._frontend.fields.print_container_indicator") %></strong> will <strong>always</strong> be included.</p>
+          </div>
+          <% field_count = AppConfig[:container_management_labels_fields].length
+             mid = (field_count/2).ceil - 1
+          %>
+          <div class="col-sm-2 col-md-offset-1">
+          <% AppConfig[:container_management_labels_fields][0..mid].each do |field| %>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="<%= field %>" value="true" <%= AppConfig[:container_management_labels_fields_defaults].include?(field) ? "checked" : "" %>>
+                <%= I18n.t("top_container_labels._frontend.fields.#{field}") %>
+              </label>
+            </div>
+          <% end %>
+          </div>
+          <div class="col-sm-2 col-md-offset-1">
+          <% AppConfig[:container_management_labels_fields][mid+1..field_count].each do |field| %>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="<%= field %>" value="true" <%= AppConfig[:container_management_labels_fields_defaults].include?(field) ? "checked" : "" %>>
+                <%= I18n.t("top_container_labels._frontend.fields.#{field}") %>
+              </label>
+            </div>
+          <% end %>
+          </div>
+        </div>
         <div class="form-group">
           <div class="control-label col-sm-2" for="label_type">
-            <%= I18n.t("top_container_labels._frontend.bulk_operations.label_type_label") %>
+            <%= I18n.t("top_container_labels._frontend.labels.label_type_label") %>
           </div>
           <div class="controls col-sm-3">
             <select class="form-control" name="label_type">
             <% AppConfig[:container_management_labels_pagesize].each do |k,v| %>
               <% unless k == "default" %>
-                <option value="<%= I18n.t("top_container_labels._frontend.bulk_operations.label_type_#{k}").downcase %>"><%= I18n.t("top_container_labels._frontend.bulk_operations.label_type_#{k}") %>
+                <option value="<%= I18n.t("top_container_labels._frontend.labels.label_type_#{k}").downcase %>"><%= I18n.t("top_container_labels._frontend.labels.label_type_#{k}") %>
                 </option>
               <% end %>
             <% end %>
             </select>
           </div>
           <div class="control-label col-sm-2" for="barcode_type">
-            <%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_label") %>
+            <%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_label") %>
           </div>
           <div class="controls col-sm-3">
             <select class="form-control" name="barcode_type">
-              <option value="codabar"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_codabar") %></option>
-              <option value="code11"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_code11") %></option>
-              <option value="code39"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_code39") %></option>
-              <option value="code93"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_code93") %></option>
-              <option value="code128"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_code128") %></option>
-              <option value="ean8"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_ean8") %></option>
-              <option value="ean13"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_ean13") %></option>
-              <option value="std25"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_std25") %></option>
-              <option value="int25"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_int25") %></option>
-              <option value="msi"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_msi") %></option>
-              <option value="datamatrix"><%= I18n.t("top_container_labels._frontend.bulk_operations.barcode_type_datamatrix") %></option>
+              <option value="codabar"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_codabar") %></option>
+              <option value="code11"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code11") %></option>
+              <option value="code39"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code39") %></option>
+              <option value="code93"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code93") %></option>
+              <option value="code128"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code128") %></option>
+              <option value="ean8"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean8") %></option>
+              <option value="ean13"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean13") %></option>
+              <option value="std25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_std25") %></option>
+              <option value="int25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_int25") %></option>
+              <option value="msi"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_msi") %></option>
+              <option value="datamatrix"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_datamatrix") %></option>
             </select>
           </div>
         </div>
@@ -54,5 +82,10 @@
         <button type="submit" class="btn btn-default"><%= I18n.t("top_container_labels._frontend.bulk_operations.print_n_labels", {:n => "${selection.length}"}) %></button>
         <button class="btn btn-cancel btn-default" data-dismiss="modal"><%= I18n.t("actions.cancel") %></button>
     </div>
+    <style type="text/css">
+      .form-group .checkbox input {margin-left: -20px;} /* override the app back to bootstrap default */
+    </style>
+    <script type="text/javascript" src="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels_modal.js" %>">
+    </script>
   <% end %>
 --></div>

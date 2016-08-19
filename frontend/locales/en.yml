@@ -1,7 +1,7 @@
 en:
   top_container_labels:
     _frontend:
-      bulk_operations:
+      barcodes:
         barcode_type_label: Barcode Type
         barcode_type_codabar: Codabar
         barcode_type_code11: Code 11
@@ -14,13 +14,25 @@ en:
         barcode_type_int25: Interleaved 2 of 5
         barcode_type_msi: MSI
         barcode_type_datamatrix: DataMatrix
+      bulk_operations:
         indicator_search_hint: Space separated list or a *numerical* range like this [104493 TO 104495]
         print_labels: Print Labels
         print_labels_help: Print labels for all selected containers.
         print_n_labels: "Print labels for %{n} containers"
         label_page_title: ArchivesSpace Container Labels
+      fields:
+        print_agent_name: Creator
+        print_container_indicator: Container Indicator
+        print_container_type: Container Type
+        print_indicator_barcode: Container Barcode
+        print_institution: Parent Institution Name
+        print_location: Location
+        print_location_barcode: Location Barcode
+        print_repository: Repository Name
+        print_resource_id: Resource Identifier
+        print_resource_title: Resource Title
+        print_series_id: Series Identifier
+      labels:
         label_type_label: Label Type
         label_type_dymo-30256: Dymo-30256 # use the label manufacturer and the type here and in the CSS. Note the hyphen!
         label_type_avery-5163: Avery-5163
-
-        

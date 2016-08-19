@@ -23,6 +23,13 @@ Rails.application.config.after_initialize do
   # add the default page sizing in any case
   AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
   
+  # set the fields to display as checkbox options
+  AppConfig[:container_management_labels_fields] = [
+    "print_institution", "print_repository", "print_resource_id", "print_resource_title",
+    "print_agent_name", "print_series_id", "print_container_type", "print_indicator_barcode",
+    "print_location", "print_location_barcode"
+  ]
+  
   ActionView::PartialRenderer.class_eval do
     alias_method :render_labels, :render
     def render(context, options, block)
