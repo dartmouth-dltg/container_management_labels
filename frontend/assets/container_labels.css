@@ -1,132 +1,3 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video{
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section{
-    display: block;
-}
-body{
-    line-height: 1;
-}
-ol,
-ul{
-    list-style: none;
-}
-blockquote,
-q{
-    quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after{
-    content: '';
-    content: none;
-}
-table{
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-/* end meyerweb reset css */
 /* container labels printing css
    the convention will be to use the same text for ids/classes as used for the label type in en.yml
    example:
@@ -147,7 +18,7 @@ body{
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 12pt;
 }
-.label {
+.label{
     overflow: scroll;
 }
 div.label > div{
@@ -157,11 +28,11 @@ div.label > div{
     text-align: center;
     width: 95%;
 }
-div.label .label-resource-id{
+div.label .resource_id{
     font-weight: 500;
     font-size: 140%;
 }
-div.label .label-indicator{
+div.label .indicator{
     border-style: solid;
     border-width: 1px;
     font-weight: 900;
@@ -169,25 +40,25 @@ div.label .label-indicator{
     max-height: 100px;
     padding: 2px;
 }
-div.label .label-resource-title{
+div.label .resource_title{
     font-weight: bold;
 }
-div.label .label-divider{
+div.label .divider{
     border-style: solid;
     border-width: 0px;
     border-bottom-width: 1px;
     height: 1px;
     position: relative;
 }
-div.label .label-barcode,
-div.label .label-barcode > div{
+div.label .barcode,
+div.label .barcode > div{
     margin: 2px auto;
     max-height: 50%;
 }
-div.label .label-barcode div:last-of-type {
-    clear:none !important;
+div.label .barcode div:last-of-type{
+    clear: none !important;
 }
-div.label:last-of-type {
+div.label:last-of-type{
     page-break-after: avoid !important;
 }
 /* label specific sizing and layout */
@@ -211,10 +82,10 @@ div.label:last-of-type {
     padding-right: 0.125in;
 }
 @media print{
-    .label:last-of-type {
+    .label:last-of-type{
         page-break-after: avoid !important;
     }
-/*************************************************************
+    /*************************************************************
         set when the page breaks should occur for each label type 
         notice that the dymo is for every label
         while the avery is after every 10th label
@@ -232,17 +103,17 @@ div.label:last-of-type {
         page-break-after: auto;
     }
     .labels.safari-label{
-        margin-top:.25in !important; 
+        margin-top: .25in !important;
     }
     .labels.chrome-label{
-        margin-top:0in !important; 
+        margin-top: 0in !important;
     }
     .avery-5163.safari-label{
-        width:3.6in !important;
+        width: 3.6in !important;
         height: 1.9in !important;
     }
     .avery-5163.chrome-label{
-        width:3.875in !important; 
+        width: 3.875in !important;
         height: 2in !important;
     }
     .avery-5163.chrome-label:nth-of-type(10){

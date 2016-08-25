@@ -17,21 +17,28 @@ en:
       bulk_operations:
         indicator_search_hint: Space separated list or a *numerical* range like this [104493 TO 104495]
         print_labels: Print Labels
-        print_labels_help: Print labels for all selected containers.
+        print_labels_help: "Print labels for these containers:"
         print_n_labels: "Print labels for %{n} containers"
         label_page_title: ArchivesSpace Container Labels
       fields:
-        print_agent_name: Creator
-        print_container_indicator: Container Indicator
-        print_container_type: Container Type
-        print_indicator_barcode: Container Barcode
-        print_institution: Parent Institution Name
-        print_location: Location
-        print_location_barcode: Location Barcode
-        print_repository: Repository Name
-        print_resource_id: Resource Identifier
-        print_resource_title: Resource Title
-        print_series_id: Series Identifier
+        agent_name: Creator
+        auto_scale: Auto Scale Labels
+        auto_scale_header: Auto Scale
+        auto_scale_message: Auto scale will attempt to shrink any label that overflows the available label space. Labels that fit will not be scaled.
+        barcode: Container Barcode
+        field_header: Fields
+        fields_message: Select the fields to include on the label(s). Fields will appear on the label in the same order.
+        fields_select_all:  Select all
+        fields_container_message: The <strong>Container Indicator</strong> will <strong>always</strong> be included.
+        indicator: Container Indicator
+        institution_name: Parent Institution Name
+        location: Location
+        location_barcode: Location Barcode
+        repository_name: Repository Name
+        resource_id: Resource Identifier
+        resource_title: Resource Title
+        series_id: Series Identifier
+        type: Container Type
       labels:
         label_type_label: Label Type
         label_type_dymo-30256: Dymo-30256 # use the label manufacturer and the type here and in the CSS. Note the hyphen!

@@ -20,8 +20,45 @@ The labels that are available to print from within the browser are defined in tw
 
 #### config.rb file
 
-    # Label sizes for container_management_labels plugin.
-    # Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
+Define the fields and order in which they should appear on the label. The fields must be a member of the following list unless
+additional fields are set in the model (backend/model/label_data.rb)
+
+    institution_name
+    repository_name
+    resource_id
+    resource_title
+    agent_name
+    series_id
+    type
+    indicator
+    barcode
+    location
+    location_barcode
+    
+Each key should also indicate whether the field will be a default ("checked" => true) and whether the end user
+should be able to change it ("disabled" => false). The following are the default settings and are set automatically if the
+config file does not contain the :container_management_labels key.
+    
+    AppConfig[:container_management_labels] = [
+        {"institution_name" => {"checked" => true, "disabled" => false}},
+        {"repository_name" => {"checked" => true, "disabled" => false}},
+        {"resource_id" => {"checked" => true, "disabled" => false}},
+        {"resource_title" => {"checked" => true, "disabled" => false}},
+        {"agent_name" => {"checked" => true, "disabled" => false}},
+        {"series_id" => {"checked" => false, "disabled" => false}},
+        {"type" => {"checked" => false, "disabled" => false}},
+        {"indicator" => {"checked" => true, "disabled" => true}},
+        {"barcode" => {"checked" => false, "disabled" => false}},
+        {"location" => {"checked" => false, "disabled" => false}},
+        {"location_barcode" => {"checked" => false, "disabled" => false}}
+    ]
+
+Note that the indicator field should *always* be present and will *always* be set to "checked" and "disabled" during plugin initialization.
+If it is not present in the :container_management_labels key it will be added at the end of the list.
+
+Label sizes for container_management_labels plugin.
+Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
+
     AppConfig[:container_management_labels_pagesize] = {
         "dymo-30256" => {"size" => "59mm 102mm", "margin" => "5mm 1mm 5mm 1mm"},
         "avery-5163" => {"size" => "letter", "margin" => "0.5in 0.125in"}
@@ -30,10 +67,20 @@ The labels that are available to print from within the browser are defined in tw
 If no label sizes are defined, the plugin will default to a letter size with 0.25 in margins (defined in plugin_init.rb).
 The keys should be named the same as in the CSS and the locales (below).
 
+Autoscaling can also be turned on or off from the config file.
+Autoscaling attempts to scale any label that overflows the defined label area by applying a css transform.
+If "disabled" is set to false, an end user can turn autoscaling on or off on a per job basis.
+
+    AppConfig[:container_management_labels_autoscale] = {
+      "checked" => true,
+      "disabled" => false
+    }
+
 #### /frontend/assets/container_labels.css
 
      This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
-     of using the label name as a namespace, eg ".dymo-30256"
+     of using the label name as a namespace, eg ".dymo-30256". Also note that specific field css must use the same namespace as
+     fields listed in :container_management_labels, eg a class of ".indicator".
       
 #### /locales/en.yml
 
@@ -44,8 +91,12 @@ The keys should be named the same as in the CSS and the locales (below).
 
 The labels will display the following fields (if data is present):
 
-    Resource ID
-    Resource Title
+    Insititution Name
+    Repository name
+    Resource ID (a concatenated list of all resource ids associated with the top container)
+    Resource Title (a concatenated list of all resource titles associated with the top container)
+    Agent Name (a concatenated list of all creators associated with the top container's associated resource)
+    Series ID (a concatenated list of all series associated with the top container)
     Top Container Indicator
     Top Container Barcode
     Location Title
@@ -78,4 +129,5 @@ It supports two label sizes on install:
     Dymo 30256 (59mm x 102mm, portrait, thermal roll)
     Avery 5163 (2in x 5in, letter, portrait)
     
-Some local customization will be required to add additional label types and orientations.
+Some local customization will be required to add additional label types and orientations. Additional css customizations may be necessary for
+local browser and printer combinations.

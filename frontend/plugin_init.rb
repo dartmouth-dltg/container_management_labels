@@ -13,6 +13,34 @@ Rails.application.config.after_initialize do
     raise "Plugin dependency not satisfied - container_management_labels requires container_management"
   end
   
+  # check for the setting that manages the label fields and set a default if not found
+  unless AppConfig.has_key?(:container_management_labels)
+    $stderr.puts "WARNING: container_management_labels plugin has no print fields set. Setting default values."
+    AppConfig[:container_management_labels] = [
+        {"institution_name" => {"checked" => true, "disabled" => false}},
+        {"repository_name" => {"checked" => true, "disabled" => false}},
+        {"resource_id" => {"checked" => true, "disabled" => false}},
+        {"resource_title" => {"checked" => true, "disabled" => false}},
+        {"agent_name" => {"checked" => true, "disabled" => false}},
+        {"series_id" => {"checked" => false, "disabled" => false}},
+        {"type" => {"checked" => false, "disabled" => false}},
+        {"indicator" => {"checked" => true, "disabled" => true}},
+        {"barcode" => {"checked" => false, "disabled" => false}},
+        {"location" => {"checked" => false, "disabled" => false}},
+        {"location_barcode" => {"checked" => false, "disabled" => false}}
+    ]
+  end
+  
+  # always ensure that the indicator will print and is not changeable
+  #if AppConfig[:container_management_labels].find{|v| /container_indicator/ =~ v.to_s}.length > 0
+  #    AppConfig[:container_management_labels].map!{|v|
+  #      if v.to_s =~ /container_indicator/
+  #        v = '"container_indicator" => {"checked" => true, "disabled" => true}'
+  #      end
+  #    }
+  #else
+  #  AppConfig[:container_management_labels].push("container_indicator" => {"checked" => true, "disabled" => true})
+  #end
   # check to see if any page sizes have been defined
   unless AppConfig.has_key?(:container_management_labels_pagesize)
     $stderr.puts "WARNING: container_management_labels plugin has no page sizes defined. " +
@@ -22,13 +50,6 @@ Rails.application.config.after_initialize do
   
   # add the default page sizing in any case
   AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
-  
-  # set the fields to display as checkbox options
-  AppConfig[:container_management_labels_fields] = [
-    "print_institution", "print_repository", "print_resource_id", "print_resource_title",
-    "print_agent_name", "print_series_id", "print_container_type", "print_indicator_barcode",
-    "print_location", "print_location_barcode"
-  ]
   
   ActionView::PartialRenderer.class_eval do
     alias_method :render_labels, :render

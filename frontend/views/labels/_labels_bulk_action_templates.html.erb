@@ -1,9 +1,8 @@
 <div id="labels_bulk_action_print_labels"><!--
   <%= form_tag({:controller => :top_containers_labels, :action => :print_labels}, {:class => "form-horizontal", :id => "print_labels_form", :target => "_blank" }) do |f| %>
     <div class="modal-body">
-        <div class="alert alert-info" id="alertBucket"><%= I18n.t("top_container_labels._frontend.bulk_operations.print_labels_help") %></div>
-
         <div class="selected-record-list well">
+        <h4><%= I18n.t("top_container_labels._frontend.bulk_operations.print_labels_help") %></h4>
             <ul>
                 {for container in selection}
                 <li>
@@ -14,32 +13,47 @@
             </ul>
         </div>
         <div class="form-group well">
-          <div class="col-sm-12">
-            <p>Select the fields to include on the label(s). (<a href="#" id="check-all-label-fields">Select all</a>)<p>
-            <p>The <strong><%= I18n.t("top_container_labels._frontend.fields.print_container_indicator") %></strong> will <strong>always</strong> be included.</p>
-          </div>
-          <% field_count = AppConfig[:container_management_labels_fields].length
-             mid = (field_count/2).ceil - 1
+            <div class="col-sm-12">
+            <h4><%= I18n.t("top_container_labels._frontend.fields.field_header") %></h4>
+              <p><%= I18n.t("top_container_labels._frontend.fields.fields_message") %><p>
+              <p><%= I18n.t("top_container_labels._frontend.fields.fields_container_message") %>
+              </p>
+            </div>
+          <% field_count = AppConfig[:container_management_labels].length
+             mid = (field_count/2).ceil
           %>
           <div class="col-sm-2 col-md-offset-1">
-          <% AppConfig[:container_management_labels_fields][0..mid].each do |field| %>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="<%= field %>" value="true" <%= AppConfig[:container_management_labels_fields_defaults].include?(field) ? "checked" : "" %>>
-                <%= I18n.t("top_container_labels._frontend.fields.#{field}") %>
-              </label>
-            </div>
+          <% AppConfig[:container_management_labels][0..mid].each do |hash| %>
+            <% hash.each do |key, val| %>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="<%= key %>" value="true" <%= val['checked'] ? "checked" : "" %> <%= val['disabled'] ? "disabled" : "" %>>
+                  <%= I18n.t("top_container_labels._frontend.fields.#{key}") %>
+                </label>
+              </div>
+            <% end %>
           <% end %>
           </div>
           <div class="col-sm-2 col-md-offset-1">
-          <% AppConfig[:container_management_labels_fields][mid+1..field_count].each do |field| %>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="<%= field %>" value="true" <%= AppConfig[:container_management_labels_fields_defaults].include?(field) ? "checked" : "" %>>
-                <%= I18n.t("top_container_labels._frontend.fields.#{field}") %>
-              </label>
-            </div>
+          <% AppConfig[:container_management_labels][mid+1..field_count].each do |hash| %>
+            <% hash.each do |key, val| %>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="<%= key %>" value="true" <%= val['checked'] ? "checked" : "" %> <%= val['disabled'] ? "disabled" : "" %>>
+                  <%= I18n.t("top_container_labels._frontend.fields.#{key}") %>
+                </label>
+              </div>
+            <% end %>
           <% end %>
+          </div>
+          <div class="col-sm-12">
+            <h4><%= I18n.t("top_container_labels._frontend.fields.auto_scale_header") %></h4>
+            <p><%= I18n.t("top_container_labels._frontend.fields.auto_scale_message") %>
+            <label>
+              <input type="checkbox" name="auto-scale" value="true" <%= AppConfig[:container_management_labels_autoscale]['checked'] ? "checked" : "" %> <%= AppConfig[:container_management_labels_autoscale]['disabled'] ? "disabled" : "" %>>
+              <%= I18n.t("top_container_labels._frontend.fields.auto_scale") %>
+            </label>
+            </p>
           </div>
         </div>
         <div class="form-group">

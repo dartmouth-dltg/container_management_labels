@@ -1,90 +1,47 @@
 <html>
   <head>
     <title><%= I18n.t("top_container_labels._frontend.bulk_operations.label_page_title") %></title>
+    <link href="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels_reset.css" %>" media="all" rel="stylesheet" type="text/css"/>
     <link href="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels.css" %>" media="all" rel="stylesheet" type="text/css"/>
     <script src="<%= "#{AppConfig[:frontend_prefix]}assets/jquery.js?body=1" %>" type="text/javascript"></script>
     <script src="<%= "#{AppConfig[:frontend_prefix]}assets/jquery-barcode.min.js" %>" type="text/javascript"></script>
     <script src="<%= "#{AppConfig[:frontend_prefix]}assets/container_labels.js" %>" type="text/javascript"></script>
   </head>
 
-<body>
-  <div class="labels">
-    <% labels.each do |label| %>
-      <% 
-        loc = label['container_locations'].select { |cl| cl['status'] == 'current' }.first
-        loc = loc ? loc['_resolved'] : {}
-        location_title = loc['title']
-        location_barcode = loc['barcode']
-                        
-        indicator = label['indicator']
+  <body>
+    <div class="labels">
+      <%
+        # get the fields that we want to include
+        fields = AppConfig[:container_management_labels].map{|h| h.keys}.flatten
         
-        container_type = label['type']
-        
-        barcode = label['barcode'] ? label['barcode'] : ''
-        
-        repository = label['repository']['_resolved']['name']
-        
-        institution = label['repository']['_resolved']['parent_institution_name'] ? label['repository']['_resolved']['parent_institution_name'] : ''
-        
-        resource = label['collection'].empty? ? {} : label['collection'].first
-        resource_id = resource['identifier']
-        resource_title = resource['display_string']
-        
-        series = label['series'].empty? ? '' : label['series'].first
-        series_id = series['identifier'] ? series['identifier'] : ''
-        
-        agent = label['agent'].empty? ? '' : label['agent']
+        # make sure the params are ordered the same as the fields set in the config
+        params_new = Hash[params.to_a.sort_by{|param| fields.index(param)}]
       %>
-      <div class="label <%= params['label_type'] %>">
-        <% if params['print_institution'] %>
-          <div class="label-institution"><%= institution %></div>
-        <% end %>
-        <% if params['print_repository'] %>
-          <div class="label-repository"><%= repository %></div>
-        <% end %>
-        <% if params['print_resource_id'] %>
-          <div class="label-resource-id"><%= resource_id %></div>
-        <% end %>
-        <% if params['print_resource_title'] %>
-          <div class="label-resource-title"><%= resource_title %></div>
-        <% end %>
-        <% if params['print_agent_name'] && !agent.empty? %>
-          <div class="label-agent-name"><%= agent %></div>
-        <% end %>
-        <% if params['print_series_id'] && !series_id.empty? %>
-          <div class="label-series-title">Series <%= series_id %></div>
-        <% end %>
-        <% if params['print_container_type'] %>
-          <div class="label-container-type"><%= container_type.titlecase %></div>
-        <% end %>
-        <div class="label-indicator"><%= indicator %></div>
-        <% if params['print_indicator_barcode'] && !barcode.empty?%>
-          <div class="label-barcode" data="<%= barcode %>"></div>
-        <% end %>
-        <% if params['print_location'] || params['print_location_barcode'] %>
-          <% unless loc.empty? %>
-            <div class="label-divider"></div>
-              <% if params['print_location'] %>
-                <div class="label-location"><%= location_title %></div>
+      <% labels.each do |label| %>
+        <div class="label <%= params['label_type'] %>">
+          <% params_new.each do |k,v| %>
+            <% if fields.include?(k) %>
+              <% if k.include?("barcode") %>
+                <div class="<%= k %>" data="<%= label[k] %>"></div>
+              <% else %>
+                <div class="<%= k %>"><%= k.include?("type") ? label[k].titlecase : label[k] %></div>
               <% end %>
-              <% if params['print_location_barcode'] && !location_barcode.empty? %>
-                <div class="label-barcode" data="<%= location_barcode %>"></div>
-              <% end %>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
-    <% end %>
-
-  </div>
-
-<script type="text/javascript">
-  var barcodeType = "<%= params['barcode_type'] %>";
-</script>
-<style type="text/css">
-    @page {
-      size: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['size'] rescue AppConfig[:container_management_labels_pagesize]['default']['size'] %>;
-      margin: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['margin']  rescue AppConfig[:container_management_labels_pagesize]['default']['margin']%>;
-    }
-</style>
-</body>
+        </div>
+      <% end %>
+    </div>
+  
+    <script type="text/javascript">
+      var barcodeType = "<%= params_new['barcode_type'] %>";
+      var autoScale = "<%= params_new['auto-scale'] %>";
+    </script>
+    <style type="text/css">
+        @page {
+          size: <%= AppConfig[:container_management_labels_pagesize][params_new['label_type']]['size'] rescue AppConfig[:container_management_labels_pagesize]['default']['size'] %>;
+          margin: <%= AppConfig[:container_management_labels_pagesize][params_new['label_type']]['margin']  rescue AppConfig[:container_management_labels_pagesize]['default']['margin']%>;
+        }
+    </style>
+    
+  </body>
 </html>

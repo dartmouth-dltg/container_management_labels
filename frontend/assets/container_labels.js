@@ -3,44 +3,87 @@
 // This is an *addition* to the container management plugin and must be migrated/checked when that plugin is updated
 // See also the template file /container_management/frontend/views/top_containers/bulk_operations/_bulk_action_labels.html.erb for the code that includes this script
 
-$().ready(function() {
-	var isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
-	var isSafari = navigator.userAgent.toLowerCase().indexOf("safari") > -1;
+function labelScale() {
+	// the selectors to use
+	this.LABEL_SELECTOR = ".label";
+	this.LABEL_SET_SELECTOR = ".labels";
+	this.BARCODE_SELECTOR = "[class$=barcode]";
+	this.LABEL_SCALE_SELECTOR = ".label-scaled";
+
+	this.isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
+	this.isSafari = navigator.userAgent.toLowerCase().indexOf("safari") > -1;
+	this.BARCODE_HEIGHT = 30;
 	
+	this.barcodeType();
+	this.addBrowserClasses();
+	this.convertBarcodeData();
+	if (autoScale) {
+		this.scaleLabelFonts();
+	}
+}
+
+labelScale.prototype.barcodeType = function() {
 	if (typeof barcodeType == 'undefined') {
 		barcodeType = "codabar";
 	}
-	
-	if (isSafari) {
-		$(".label, .labels").addClass("safari-label");
+}
+
+labelScale.prototype.addBrowserClasses = function () {
+	var self = this;
+	if (self.isSafari) {
+		$([self.LABEL_SELECTOR, self.LABEL_SET_SELECTOR].join(",")).addClass("safari-label");
 	}
-	if (isChrome) {
-		$(".label, .labels").addClass("chrome-label");
+	if (self.isChrome) {
+		$([self.LABEL_SELECTOR, self.LABEL_SET_SELECTOR].join(",")).addClass("chrome-label");
 	}
-	$(".labels .label").last().css("page-break-after","avoid");
-	
+	$([self.LABEL_SELECTOR, self.LABEL_SET_SELECTOR].join(",")).last().css("page-break-after","avoid");
+}
+
+labelScale.prototype.convertBarcodeData = function() {
 	// convert the barcode data attribute to real barcodes
-	
-	$(window).on("load", function() {
-		$(document).find(".label-barcode").each(function() {
-			if (this.getAttribute("data")) {
-					$(this).barcode(this.getAttribute("data"), barcodeType, {barHeight:30});
-			}
-		});
-	
+	var self = this;
+	$(document).find(self.BARCODE_SELECTOR).each(function() {
+		if (this.getAttribute("data")) {
+				$(this).barcode(this.getAttribute("data"), barcodeType, {barHeight:self.BARCODE_HEIGHT});
+		}
+	});
+
+}
+labelScale.prototype.scaleLabelFonts = function() {	
+	var self = this;
 	// check the size of each label to see if its overflowing and scale if necessary	
-		$(".label").each(function() {
-		//var barcodeCount = $(this).children(".label-barcode").length;
-		var total = 0;
-		$(this).children(".label-barcode").each(function() {total += $(this).innerHeight()});
-		console.log(total);
-		var totalHeight = $(this)[0].scrollHeight + total;
-			if ( $(this).innerHeight() < totalHeight) {
-				var scale = $(this).innerHeight()/totalHeight;
-				$(this).children().css({'transform': "scale("+scale+")", 'line-height':scale });
-				//$(this).css();
-			}
+	$(self.LABEL_SELECTOR).each(function() {
+		var totalBarcodeHeight = 0;
+		$(this).children(self.BARCODE_SELECTOR).each(function() {
+			totalBarcodeHeight += $(this).outerHeight();
 		});
-});
+		var totalHeight = $(this)[0].scrollHeight + totalBarcodeHeight;
+		if ($(this).outerHeight() < totalHeight) {
+			self.scale = $(this).outerHeight()/totalHeight;
+			$(this).addClass(self.LABEL_SCALE_SELECTOR.replace(".",""));
+
+			// scale the font size of all label elements
+			$(self.LABEL_SCALE_SELECTOR).children("div").each( function () {
+				self.LabelSetCSS($(this),"font-size");
+			});
+			
+			// scale the barcode stripes, but not the actual text
+			$(self.BARCODE_SELECTOR).children("div").each( function () {
+				if (!$(this).text().length > 0) {
+					self.LabelSetCSS($(this),"height");
+				}
+			});
+		}
+	});
+}
+
+// just scale the attribute
+labelScale.prototype.LabelSetCSS = function(el,attr) {
+	var self = this;
+	$(el).css(attr, $(el).css(attr).replace("px","")*self.scale+"px");
+}
+
+$().ready( function() {
+	new labelScale();
 });
     
