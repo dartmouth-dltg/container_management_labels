@@ -31,7 +31,7 @@ including an entry such as:
      
 This plugin adds data to the index and the database setup script needs to be run to trigger a reindex of existing top containers. 
 
-    cd /path/to/archvivesspace
+    cd /path/to/archivesspace
     scripts/setup-database.sh
      
 ## Configuring & Modifying
@@ -60,17 +60,39 @@ should be able to change it ("disabled" => false). The following are the default
 config file does not contain the :container_management_labels key.
     
     AppConfig[:container_management_labels] = [
-        {"institution_name" => {"checked" => true, "disabled" => false}},
-        {"repository_name" => {"checked" => true, "disabled" => false}},
-        {"resource_id" => {"checked" => true, "disabled" => false}},
-        {"resource_title" => {"checked" => true, "disabled" => false}},
-        {"agent_name" => {"checked" => true, "disabled" => false}},
-        {"series_id" => {"checked" => false, "disabled" => false}},
-        {"type" => {"checked" => false, "disabled" => false}},
-        {"indicator" => {"checked" => true, "disabled" => true}},
-        {"barcode" => {"checked" => false, "disabled" => false}},
-        {"location" => {"checked" => false, "disabled" => false}},
-        {"location_barcode" => {"checked" => false, "disabled" => false}}
+        {"institution_name" => {
+            "checked" => true,
+            "disabled" => false}},
+        {"repository_name" => {
+            "checked" => true,
+            "disabled" => false}},
+        {"resource_id" => {
+            "checked" => true,
+            "disabled" => false}},
+        {"resource_title" => {
+            "checked" => true,
+            "disabled" => false}},
+        {"agent_name" => {
+            "checked" => true,
+            "disabled" => false}},
+        {"series_id" => {
+            "checked" => false,
+            "disabled" => false}},
+        {"type" => {
+            "checked" => false,
+            "disabled" => false}},
+        {"indicator" => {
+            "checked" => true,
+            "disabled" => true}},
+        {"barcode" => {
+            "checked" => false,
+            "disabled" => false}},
+        {"location" => {
+            "checked" => false,
+            "disabled" => false}},
+        {"location_barcode" => {
+            "checked" => false,
+            "disabled" => false}}
     ]
 
 Note that the indicator field should *always* be present and will *always* be set to "checked" and "disabled" during plugin initialization.
@@ -80,8 +102,12 @@ If it is not present in the :container_management_labels key, it will be added t
 Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
 
     AppConfig[:container_management_labels_pagesize] = {
-        "dymo-30256" => {"size" => "59mm 102mm", "margin" => "5mm 1mm 5mm 1mm"},
-        "avery-5163" => {"size" => "letter", "margin" => "0.5in 0.125in"}
+        "dymo-30256" => {
+            "size" => "59mm 102mm",
+            "margin" => "5mm 1mm 5mm 1mm"},
+        "avery-5163" => {
+            "size" => "letter",
+            "margin" => "0.5in 0.125in"}
     }
     
 If no label sizes are defined, the plugin will default to a letter size with 0.25in margins (defined in plugin_init.rb).
