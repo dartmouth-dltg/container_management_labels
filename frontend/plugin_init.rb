@@ -32,15 +32,19 @@ Rails.application.config.after_initialize do
   end
   
   # always ensure that the indicator will print and is not changeable
-  #if AppConfig[:container_management_labels].find{|v| /container_indicator/ =~ v.to_s}.length > 0
-  #    AppConfig[:container_management_labels].map!{|v|
-  #      if v.to_s =~ /container_indicator/
-  #        v = '"container_indicator" => {"checked" => true, "disabled" => true}'
-  #      end
-  #    }
-  #else
-  #  AppConfig[:container_management_labels].push("container_indicator" => {"checked" => true, "disabled" => true})
-  #end
+  AppConfig[:container_management_labels].each do |field|
+    if !field['indicator'].nil?
+      field['indicator'] = {"checked" => true, "disabled" => true}
+      $stderr.puts "INFO: Ensuring that the indicator will print on labels."
+    end
+  end
+  
+  unless AppConfig[:container_management_labels].find{|field| field.key?("indicator")}
+    AppConfig[:container_management_labels].push("indicator" => {"checked" => true, "disabled" => true})
+    $stderr.puts "WARNING: No indicator found in AppConfig[:container_management_labels]. Adding the indicator to the label fields."
+  end
+  
+    
   # check to see if any page sizes have been defined
   unless AppConfig.has_key?(:container_management_labels_pagesize)
     $stderr.puts "WARNING: container_management_labels plugin has no page sizes defined. " +
