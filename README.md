@@ -8,11 +8,18 @@ This plugin was originally a fork of https://github.com/hudmol/container_managem
 
 The plugin adds a new option to the Bulk Operations menu in the Manage Top Containers view. The new menu option allows
 a user to print labesl directly from the browser. The user can select which fields to add to the label, what barcode type
-to use if any of the selected fields are barcode fields and what label type to print. Some additional work will be required
-to add additional label types (see general note below for included types).
+to use if any of the selected fields are barcode fields and what label type to print.
+
+It supports two label sizes on install:
+
+    Dymo 30256 (59mm x 102mm, portrait, thermal roll)
+    Avery 5163 (2in x 5in, letter, portrait)
+    
+Some local customization will be required to add additional label types and orientations. Additional css customizations may be necessary for
+local browser and printer combinations.
 
 The plugin also adds an indicator search option to the Manage Top Containers view. The indicator search supports searching
-on a space spearted list of indicators OR a *numerical* range - [1 TO 10]
+on a space spearted list of indicators OR a *numerical* range like [1 TO 10]
 
 ## Installing
 
@@ -22,7 +29,7 @@ including an entry such as:
      # If you have other plugins loaded, just add 'container_management_labels' to the list
      AppConfig[:plugins] = ['local', 'other_plugins', 'container_management_labels']
      
-This plugin adds data to the index and the database setup script needs to be run to trigger a reindex ot top containers. 
+This plugin adds data to the index and the database setup script needs to be run to trigger a reindex of existing top containers. 
 
     cd /path/to/archvivesspace
     scripts/setup-database.sh
@@ -77,12 +84,12 @@ Label keys should match those used in the en.yml file in the plugin and should d
         "avery-5163" => {"size" => "letter", "margin" => "0.5in 0.125in"}
     }
     
-If no label sizes are defined, the plugin will default to a letter size with 0.25 in margins (defined in plugin_init.rb).
+If no label sizes are defined, the plugin will default to a letter size with 0.25in margins (defined in plugin_init.rb).
 The keys should be named the same as in the CSS and the translation yml (below).
 
 ##### Autoscaling can also be turned on or off from the config file.
 Autoscaling attempts to scale any label that overflows the defined label area by applying a css transform.
-If "disabled" is set to false, an end user can turn autoscaling on or off on a per job basis.
+If "disabled" is set to false, an end user can turn autoscaling on or off on a per use basis.
 
     AppConfig[:container_management_labels_autoscale] = {
       "checked" => true,
@@ -91,14 +98,19 @@ If "disabled" is set to false, an end user can turn autoscaling on or off on a p
 
 #### /frontend/assets/container_labels.css
 
-     This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
-     of using the label name as a namespace, eg ".dymo-30256". Also note that specific field css must use the same namespace as
-     fields listed in :container_management_labels, eg a class of ".indicator".
+This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
+of using the label name as a namespace, eg ".dymo-30256". Also note that specific field css must use the same namespace as
+fields listed in :container_management_labels, eg a class of ".indicator".
       
 #### /locales/en.yml
 
-    The translations for each label are defined here. Note the hyphen in the example.
-        label_type_dymo-30256: Dymo-30256
+The translations for each label are defined here. Note the hyphen in the label name.
+
+    en:
+      top_container_labels:
+          _frontend:
+            labels:
+              label_type_dymo-30256: Dymo-30256
 
 ## Fields/Data Displayed
 
@@ -118,7 +130,7 @@ The labels will display the following fields (if data is present):
 ## Barcodes
 
 The barcodes are generated using the jQuery barcode plugin from http://barcode-coder.com/en/barcode-jquery-plugin-201.html
-The following barcode types are available and defaults to codabar:
+The following barcode types are available - codabar is the default type:
 
     codabar (Codabar - numeric, typically used in libraries)
     code11 (Code 11 - numeric, typically used in telecom)
@@ -133,14 +145,3 @@ The following barcode types are available and defaults to codabar:
     datamatrix (DataMatrix, ASCII + extended - alpha-numeric, 2D for small, high density use)
 
 Note that the use of the datamatrix type barcode will most likely require some reworking of the css.
-
-## General Note
-
-This plugin requires the container management integration in ArchivesSpace v1.5.1+.
-It supports two label sizes on install:
-
-    Dymo 30256 (59mm x 102mm, portrait, thermal roll)
-    Avery 5163 (2in x 5in, letter, portrait)
-    
-Some local customization will be required to add additional label types and orientations. Additional css customizations may be necessary for
-local browser and printer combinations.
