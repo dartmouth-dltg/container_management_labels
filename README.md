@@ -6,6 +6,14 @@ It is compatible with ArchivesSpace v1.5.1+
 
 This plugin was originally a fork of https://github.com/hudmol/container_management
 
+The plugin adds a new option to the Bulk Operations menu in the Manage Top Containers view. The new menu option allows
+a user to print labesl directly from the browser. The user can select which fields to add to the label, what barcode type
+to use if any of the selected fields are barcode fields and what label type to print. Some additional work will be required
+to add additional label types (see general note below for included types).
+
+The plugin also adds an indicator search option to the Manage Top Containers view. The indicator search supports searching
+on a space spearted list of indicators OR a *numerical* range - [1 TO 10]
+
 ## Installing
 
 To install, just activate the plugin in your config.rb file by
@@ -14,9 +22,14 @@ including an entry such as:
      # If you have other plugins loaded, just add 'container_management_labels' to the list
      AppConfig[:plugins] = ['local', 'other_plugins', 'container_management_labels']
      
+This plugin adds data to the index and the database setup script needs to be run to trigger a reindex ot top containers. 
+
+    cd /path/to/archvivesspace
+    scripts/setup-database.sh
+     
 ## Configuring & Modifying
 
-The labels that are available to print from within the browser are defined in two (2) files and the config.rb file.
+The labels that are available to print from within the browser are defined in two (2) plugin files and the config.rb file.
 
 #### config.rb file
 
@@ -54,9 +67,9 @@ config file does not contain the :container_management_labels key.
     ]
 
 Note that the indicator field should *always* be present and will *always* be set to "checked" and "disabled" during plugin initialization.
-If it is not present in the :container_management_labels key it will be added at the end of the list.
+If it is not present in the :container_management_labels key, it will be added to the end of the list at startup.
 
-Label sizes for container_management_labels plugin.
+##### Label sizes for container_management_labels plugin.
 Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
 
     AppConfig[:container_management_labels_pagesize] = {
@@ -65,9 +78,9 @@ Label keys should match those used in the en.yml file in the plugin and should d
     }
     
 If no label sizes are defined, the plugin will default to a letter size with 0.25 in margins (defined in plugin_init.rb).
-The keys should be named the same as in the CSS and the locales (below).
+The keys should be named the same as in the CSS and the translation yml (below).
 
-Autoscaling can also be turned on or off from the config file.
+##### Autoscaling can also be turned on or off from the config file.
 Autoscaling attempts to scale any label that overflows the defined label area by applying a css transform.
 If "disabled" is set to false, an end user can turn autoscaling on or off on a per job basis.
 

@@ -8,10 +8,8 @@ function printLabelCheckboxesSetup() {
 		this.checkboxes = $("#print_labels_form input[type=checkbox]");
 		this.barcodeCheckboxes = "#print_labels_form input[name~=barcode]";
 		this.barcodeTypeSelector = $("#print_labels_form select[name=barcode_type]");
-		this.allCheckboxesSelector = $("#check-all-label-fields");
 		
 		this.barcodeActionsSetup()
-		this.checkboxControl(this.checkboxes);
 		this.formControl();
 }
 
@@ -20,16 +18,6 @@ printLabelCheckboxesSetup.prototype.barcodeActionsSetup = function() {
 	self.barcodeCheck();
 	$(self.barcodeCheckboxes).each( function() {
 		$(this).click( function() {self.barcodeCheck();});
-	});
-}
-
-printLabelCheckboxesSetup.prototype.checkboxControl = function(checkboxes) {
-	var self = this;
-	$(self.allCheckboxesSelector).click( function() {
-		$(checkboxes).each( function() {
-			$(this).prop("checked", true);
-		});
-		self.barcodeCheck();
 	});
 }
 
