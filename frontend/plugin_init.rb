@@ -13,10 +13,9 @@ Rails.application.config.after_initialize do
     raise "Plugin dependency not satisfied - container_management_labels requires container_management"
   end
   
-  # check for the setting that manages the label fields and set a default if not found
-  unless AppConfig.has_key?(:container_management_labels)
-    $stderr.puts "WARNING: container_management_labels plugin has no print fields set. Setting default values."
-    AppConfig[:container_management_labels] = [
+  # define a default set of fields
+  # used as a defualt and as a check against the fields set in config.rb
+  label_default = [
         {"institution_name" => {"checked" => true, "disabled" => false}},
         {"repository_name" => {"checked" => true, "disabled" => false}},
         {"resource_id" => {"checked" => true, "disabled" => false}},
@@ -29,21 +28,37 @@ Rails.application.config.after_initialize do
         {"location" => {"checked" => false, "disabled" => false}},
         {"location_barcode" => {"checked" => false, "disabled" => false}}
     ]
+  
+  label_default_keys = label_default.map{|l| l.keys}.flatten
+  $stderr.puts "#{label_default_keys}"
+  
+  # check for the setting that manages the label fields and set a default if not found
+  unless AppConfig.has_key?(:container_management_labels)
+    $stderr.puts "WARNING: container_management_labels plugin has no print fields set. Setting default values."
+    AppConfig[:container_management_labels] = label_default
   end
   
-  # always ensure that the indicator will print and is not changeable
-  AppConfig[:container_management_labels].each do |field|
-    if !field['indicator'].nil?
-      field['indicator'] = {"checked" => true, "disabled" => true}
+  # remove any hashes if the key is *not* included in the default list
+  # AND always ensure that the indicator will print and is not changeable
+  AppConfig[:container_management_labels].each {|hash|
+    
+    hash.delete_if { |k|
+      !label_default_keys.include?(k)
+    }
+    
+    if !hash['indicator'].nil?
+      hash['indicator'] = {"checked" => true, "disabled" => true}
       $stderr.puts "INFO: Ensuring that the indicator will print on labels."
     end
-  end
+    
+   }.delete_if {|hash| hash.empty?}
   
   unless AppConfig[:container_management_labels].find{|field| field.key?("indicator")}
     AppConfig[:container_management_labels].push("indicator" => {"checked" => true, "disabled" => true})
     $stderr.puts "WARNING: No indicator found in AppConfig[:container_management_labels]. Adding the indicator to the label fields."
   end
   
+  $stderr.puts"AppConfig: #{AppConfig[:container_management_labels]}"
     
   # check to see if any page sizes have been defined
   unless AppConfig.has_key?(:container_management_labels_pagesize)
