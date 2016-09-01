@@ -15,7 +15,7 @@ en:
         barcode_type_msi: MSI
         barcode_type_datamatrix: DataMatrix
       bulk_operations:
-        indicator_search_hint: Space separated list or a *numerical* range like this [104493 TO 104495]
+        indicator_search_hint: Space separated list or a *numerical* range like this [1 TO 10]
         print_labels: Print Labels
         print_labels_help: "Print labels for these containers:"
         print_n_labels: "Print labels for %{n} containers"
@@ -29,14 +29,13 @@ en:
         field_header: Fields
         fields_message: Select the fields to include on the label(s). Fields will appear on the label in the same order.
         fields_select_all:  Select all
-        fields_container_message: The <strong>Container Indicator</strong> will <strong>always</strong> be included.
         indicator: Container Indicator
         institution_name: Parent Institution Name
         location: Location
         location_barcode: Location Barcode
         repository_name: Repository Name
-        resource_id: Resource Identifier
-        resource_title: Resource Title
+        resource_id: Resource/Accession Identifier
+        resource_title: Resource/Accession Title
         series_id: Series Identifier
         type: Container Type
       labels:

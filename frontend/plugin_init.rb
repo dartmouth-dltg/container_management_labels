@@ -39,27 +39,12 @@ Rails.application.config.after_initialize do
   end
   
   # remove any hashes if the key is *not* included in the default list
-  # AND always ensure that the indicator will print and is not changeable
   AppConfig[:container_management_labels].each {|hash|
-    
     hash.delete_if { |k|
       !label_default_keys.include?(k)
     }
-    
-    if !hash['indicator'].nil?
-      hash['indicator'] = {"checked" => true, "disabled" => true}
-      $stderr.puts "INFO: Ensuring that the indicator will print on labels."
-    end
-    
    }.delete_if {|hash| hash.empty?}
-  
-  unless AppConfig[:container_management_labels].find{|field| field.key?("indicator")}
-    AppConfig[:container_management_labels].push("indicator" => {"checked" => true, "disabled" => true})
-    $stderr.puts "WARNING: No indicator found in AppConfig[:container_management_labels]. Adding the indicator to the label fields."
-  end
-  
-  $stderr.puts"AppConfig: #{AppConfig[:container_management_labels]}"
-    
+      
   # check to see if any page sizes have been defined
   unless AppConfig.has_key?(:container_management_labels_pagesize)
     $stderr.puts "WARNING: container_management_labels plugin has no page sizes defined. " +
