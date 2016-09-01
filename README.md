@@ -7,7 +7,7 @@ It is compatible with ArchivesSpace v1.5.1+
 This plugin was originally a fork of https://github.com/hudmol/container_management
 
 The plugin adds a new option to the Bulk Operations menu in the Manage Top Containers view. The new menu option allows
-a user to print labesl directly from the browser. The user can select which fields to add to the label, what barcode type
+a user to print labels directly from the browser. The user can select which fields to add to the label, what barcode type
 to use if any of the selected fields are barcode fields and what label type to print.
 
 It supports two label sizes on install:
@@ -17,9 +17,6 @@ It supports two label sizes on install:
     
 Some local customization will be required to add additional label types and orientations. Additional css customizations may be necessary for
 local browser and printer combinations.
-
-The plugin also adds an indicator search option to the Manage Top Containers view. The indicator search supports searching
-on a space spearted list of indicators OR a *numerical* range like [1 TO 10]
 
 ## Installing
 
@@ -95,8 +92,6 @@ config file does not contain the :container_management_labels key.
             "disabled" => false}}
     ]
 
-Note that the indicator field should *always* be present and will *always* be set to "checked" and "disabled" during plugin initialization.
-If it is not present in the :container_management_labels key, it will be added to the end of the list at startup.
 
 ##### Label sizes for container_management_labels plugin.
 Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
