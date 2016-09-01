@@ -26,11 +26,6 @@ including an entry such as:
      # If you have other plugins loaded, just add 'container_management_labels' to the list
      AppConfig[:plugins] = ['local', 'other_plugins', 'container_management_labels']
      
-This plugin adds data to the index and the database setup script needs to be run to trigger a reindex of existing top containers. 
-
-    cd /path/to/archivesspace
-    scripts/setup-database.sh
-     
 ## Configuring & Modifying
 
 The labels that are available to print from within the browser are defined in two (2) plugin files and the config.rb file.
