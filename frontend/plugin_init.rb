@@ -28,10 +28,7 @@ Rails.application.config.after_initialize do
         {"location" => {"checked" => false, "disabled" => false}},
         {"location_barcode" => {"checked" => false, "disabled" => false}}
     ]
-  
-  label_default_keys = label_default.map{|l| l.keys}.flatten
-  $stderr.puts "#{label_default_keys}"
-  
+    
   # check for the setting that manages the label fields and set a default if not found
   unless AppConfig.has_key?(:container_management_labels)
     $stderr.puts "WARNING: container_management_labels plugin has no print fields set. Setting default values."
@@ -39,6 +36,8 @@ Rails.application.config.after_initialize do
   end
   
   # remove any hashes if the key is *not* included in the default list
+  label_default_keys = label_default.map{|l| l.keys}.flatten
+  
   AppConfig[:container_management_labels].each {|hash|
     hash.delete_if { |k|
       !label_default_keys.include?(k)
