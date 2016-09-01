@@ -1,13 +1,44 @@
 en:
-  dartmouth_top_container:
+  top_container_labels:
     _frontend:
+      barcodes:
+        barcode_type_label: Barcode Type
+        barcode_type_codabar: Codabar
+        barcode_type_code11: Code 11
+        barcode_type_code39: Code 39
+        barcode_type_code93: Code 93
+        barcode_type_code128: Code 128
+        barcode_type_ean8: EAN-8
+        barcode_type_ean13: EAN-13
+        barcode_type_std25: Standard 2 of 5
+        barcode_type_int25: Interleaved 2 of 5
+        barcode_type_msi: MSI
+        barcode_type_datamatrix: DataMatrix
       bulk_operations:
+        indicator_search_hint: Space separated list or a *numerical* range like this [1 TO 10]
         print_labels: Print Labels
-        print_labels_help: Print labels for all selected containers.
+        print_labels_help: "Print labels for these containers:"
         print_n_labels: "Print labels for %{n} containers"
         label_page_title: ArchivesSpace Container Labels
+      fields:
+        agent_name: Creator
+        auto_scale: Auto Scale Labels
+        auto_scale_header: Auto Scale
+        auto_scale_message: Auto scale will attempt to shrink any label that overflows the available label space. Labels that fit will not be scaled.
+        barcode: Container Barcode
+        field_header: Fields
+        fields_message: Select the fields to include on the label(s). Fields will appear on the label in the same order.
+        fields_select_all:  Select all
+        indicator: Container Indicator
+        institution_name: Parent Institution Name
+        location: Location
+        location_barcode: Location Barcode
+        repository_name: Repository Name
+        resource_id: Resource/Accession Identifier
+        resource_title: Resource/Accession Title
+        series_id: Series Identifier
+        type: Container Type
+      labels:
         label_type_label: Label Type
-        label_type_local: Local Storage Label
-        label_type_rm: Records Management Storage Label
-        indicator_search_hint: Space separated list or a range like this [104493 TO 104495]
-    archives_box: Get Next Archives Box
+        label_type_dymo-30256: Dymo-30256 # use the label manufacturer and the type here and in the CSS. Note the hyphen!
+        label_type_avery-5163: Avery-5163

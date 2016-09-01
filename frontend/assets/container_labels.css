@@ -1,144 +1,131 @@
+@charset "utf-8";
+/* container labels printing css
+   the convention will be to use the same text for ids/classes as used for the label type in en.yml
+   example:
+   en:
+  top_container_labels:
+    _frontend:
+      bulk_operations:
+        label_type_dymo_30256: dymo-30256
+   
+   use "dymo-30256" as your id/class namespace
+ */
+/* generic layout */
+*::before,
+*::after{
+    box-sizing: border-box;
+}
 body{
-    margin:0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12pt;
 }
-#labels_to_print{
-    display:block;
-    font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+.label{
+    overflow: scroll;
 }
-.box-label{
-    border-style:solid;
-    border-width:1px;
-    width:55mm;
-    height:88mm;
-    text-align:center;
-    overflow:hidden;
+div.label > div{
+    font-size: 90%;
+    height: auto;
+    margin: 0 auto;
+    text-align: center;
+    width: 95%;
 }
-.label-records-management-id{
-    position:relative;
-    width:70%;
-    height:auto;
-    font-family:serif;
-    font-weight:500;
-    font-size:18px;
-    margin:0 auto;
-    padding:0px;
+div.label .resource_id{
+    font-weight: 500;
+    font-size: 140%;
 }
-.label-location-header{
-    font-size:18px;
-    margin-top:10px;
+div.label .indicator{
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 900;
+    font-size: 120%;
+    max-height: 100px;
+    padding: 2px;
 }
-.label-location{
-    font-size:20px;
-    font-weight:700;
-    margin:0 auto;
-    width:90%;
+div.label .resource_title{
+    font-weight: bold;
 }
-.rm .label-location{
-    font-size: 16px;
-    height:20px;
-    overflow:hidden;
+div.label .barcode,
+div.label .barcode > div{
+    margin: 2px auto;
+    max-height: 50%;
 }
-.label-resource-id{
-    font-weight:500;
-    font-size:27px;
-    margin-bottom:0;
+div.label .barcode div:last-of-type{
+    clear: none !important;
 }
-.label-indicator{
-    position:relative;
-    width:80%;
-    font-weight:900;
-    font-size:45px;
-    border-style:solid;
-    border-width:2px;
-    margin:0 auto;
-    padding:0px;
-    line-height:40px;
+div.label:last-of-type{
+    page-break-after: avoid !important;
 }
-.label-resource-title{
-    font-weight:bold;
-    font-size:14px;
-    margin:5px auto;
-    width:90%;
+/* label specific sizing and layout */
+/* single thermal label on a spool */
+.dymo-30256{
+    height: 90mm;
+    width: 57mm;
 }
-.label-series-title{
-    font-size:14px;
-    margin:5px auto 0 auto;
-    height:auto;
-    max-height:35px;
-    overflow:hidden;
-    width:90%;
+/* standard 2x4 with 10 labels per sheet in portrait mode */
+.avery-5163{
+    height: 2in;
+    width: 3.875in;
 }
-.label-description{
-    height:auto;
-    max-height:35px;
-    font-size:14px;
-    margin:5px;
-    overflow:hidden;
+.avery-5163:nth-of-type(2n){
+    float: right;
+    padding-left: 0.125in;
 }
-.label-series-title-rm{
-    font-size:12px;
-    margin:2px auto 0 auto;
-    height:auto;
-    max-height:16px;
-    width:90%;
-    overflow:hidden;
-}
-.label-description-rm{
-    height:auto;
-    max-height:30px;
-    font-size:12px;
-    margin:1px auto;
-    width:90%;
-}
-.label-date{
-    font-size:16px;
-    height:20px;
-}
-.label-divider{
-    position:relative;
-    border-style:solid;
-    border-width:0px;
-    border-bottom-width:1px;
-    height:1px;
-    width:80%;
-    left:10%;
-}
-.label-records-management-id-header,
-.label-records-management-location-header{
-    font-size:10px;
-}
-.label-records-management-location{
-    border:1px solid;
-    background-color:#ccc;
-    font-size:30px;
-    margin:0 auto 2px auto;
-    width:90%;
-}
-.label-barcode{
-    width:90%;
-    height:34px;
-    margin-left:auto;
-    margin-right:auto;
-}
-@page {
-    size:59mm 102mm;
-    margin:5mm 1mm 5mm 1mm;
+.avery-5163:nth-of-type(2n+1){
+    clear: left;
+    float: left;
+    padding-right: 0.125in;
 }
 @media print{
-    .label-sheet-cell{
-        page-break-after:avoid;
+    .label:last-of-type{
+        page-break-after: avoid !important;
     }
-    .label-sheet-row .label-sheet-cell{
-        page-break-after:always;
+    /*************************************************************** 
+        safari does some wierd margin things
+        adjust for that and then reset chrome
+    ****************************************************************/
+    .labels.safari-label{
+        margin-top: .25in !important;
     }
-    .label-sheet-row .chrome-sheet-cell{
-        height:86mm;
-        page-break-after:auto;
+    .labels.chrome-label{
+        margin-top: 0in !important;
     }
-    .last{
-        page-break-after:avoid;
+    /*************************************************************
+        Set when the page breaks should occur for each label type. 
+        
+        Notice that the dymo is for every label
+        while the avery is after every 10th label.
+        
+        Note also that different browsers scale the printing differently
+        despite what *should* happen.
+     *************************************************************/
+     
+    /******** dymo 30265 *************/
+    .dymo-30256{
+        page-break-after: always;
     }
-    .box-label{
-        border-width:0px;
+    /* tell chrome to behave about page breaks */
+    .dymo-30256.chrome-label{
+        page-break-after: auto;
+    }
+    
+    /********** avery 5163 **********/
+    .avery-5163:nth-of-type(10){
+        page-break-after: always;
+    }
+    /*************************************************************** 
+        safari does some wierd scaling things
+        adjust for that and then reset chrome
+    ****************************************************************/
+    .avery-5163.safari-label{
+        width: 3.6in !important;
+        height: 1.9in !important;
+    }
+    .avery-5163.chrome-label{
+        width: 3.875in !important;
+        height: 2in !important;
+    }
+    /* tell chrome to behave about page breaks */
+    .avery-5163.chrome-label:nth-of-type(10){
+        page-break-after: auto;
     }
 }
