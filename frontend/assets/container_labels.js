@@ -53,11 +53,7 @@ labelScale.prototype.scaleLabelFonts = function() {
 	var self = this;
 	// check the size of each label to see if its overflowing and scale if necessary	
 	$(self.LABEL_SELECTOR).each(function() {
-		var totalBarcodeHeight = 0;
-		$(this).children(self.BARCODE_SELECTOR).each(function() {
-			totalBarcodeHeight += $(this).outerHeight();
-		});
-		var totalHeight = $(this)[0].scrollHeight + totalBarcodeHeight;
+		var totalHeight = $(this)[0].scrollHeight
 		if ($(this).outerHeight() < totalHeight) {
 			self.scale = $(this).outerHeight()/totalHeight;
 			$(this).addClass(self.LABEL_SCALE_SELECTOR.replace(".",""));
@@ -65,6 +61,9 @@ labelScale.prototype.scaleLabelFonts = function() {
 			// scale the font size of all label elements
 			$(self.LABEL_SCALE_SELECTOR).children("div").each( function () {
 				self.LabelSetCSS($(this),"font-size");
+				// FIXME: there's probably a more elegant way to do this
+				// any padding is going to be an issue, so remove it
+				$(this).css("padding",0);
 			});
 			
 			// scale the barcode stripes, but not the actual text

@@ -21,10 +21,12 @@
         <div class="label <%= params['label_type'] %>">
           <% params_new.each do |k,v| %>
             <% if fields.include?(k) %>
-              <% if k.include?("barcode") %>
-                <div class="<%= k %>" data="<%= label[k] %>"></div>
-              <% else %>
-                <div class="<%= k %>"><%= k.include?("type") ? label[k].titlecase : label[k] %></div>
+              <% if label[k].present? %>
+                <% if k.include?("barcode") %>
+                  <div class="<%= k %>" data="<%= label[k] %>"></div>
+                <% else %>
+                  <div class="<%= k %>"><%= k.include?("type") ? label[k].titlecase : label[k] %></div>
+                <% end %>
               <% end %>
             <% end %>
           <% end %>

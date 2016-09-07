@@ -15,11 +15,17 @@
 *::after{
     box-sizing: border-box;
 }
+/* add the glyphicons in so we can add custom icons if desired */
+@font-face {
+    font-family: "Glyphicons Halflings";
+    src: url("/assets/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("/assets/glyphicons-halflings-regular.woff2") format("woff2"), url("/assets/glyphicons-halflings-regular.woff") format("woff"), url("/assets/glyphicons-halflings-regular.ttf") format("truetype"), url("/assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+}
 body{
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 12pt;
 }
 .label{
+    margin: 5px auto;
     overflow: scroll;
 }
 div.label > div{
@@ -29,20 +35,80 @@ div.label > div{
     text-align: center;
     width: 95%;
 }
+div.label .insitution_name {
+    font-size: 120%;
+}
+div.label .repository_name {
+    font-size: 75%;
+}
+div.label .institution_name, 
+div.label .repository_name {
+    color: #555;
+    font-style: italic;
+}
+div.label .type {
+    background-color: #222;
+    border-bottom: 1px solid #666;
+    color: #fff;
+    font-size: 90%;
+    padding: 2px 0;
+}
 div.label .resource_id{
+    background-color: #222;
+    color: #fff;
     font-weight: 500;
     font-size: 140%;
+    padding: 5px 0;
+
+}
+div.label .agent_name {
+    color: #555;
+    font-style: italic;
+    padding: 2px 0;
+}
+/* demonstrates how to add a custom glyphicon icon to a label element */
+div.label .agent_name::before {
+    content:"\E008";
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    padding: 0 3px 0 0;
+    position: relative;
+    top: 1px;
 }
 div.label .indicator{
-    border-style: solid;
-    border-width: 1px;
+    background-color: #222;
+    color: #fff;
     font-weight: 900;
-    font-size: 120%;
+    font-size: 150%;
     max-height: 100px;
-    padding: 2px;
+    padding: 5px 0 ;
 }
 div.label .resource_title{
     font-weight: bold;
+    font-size: 85%;
+}
+div.label .location {
+    background-color: #efefef;
+    font-weight: bold;
+    padding: 5px 0;
+}
+div.label .location::before {
+    content:"\E062";
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    padding: 0 3px 0 0;
+    position: relative;
+    top: 1px;
 }
 div.label .barcode,
 div.label .barcode > div{
@@ -98,7 +164,6 @@ div.label:last-of-type{
         Note also that different browsers scale the printing differently
         despite what *should* happen.
      *************************************************************/
-     
     /******** dymo 30265 *************/
     .dymo-30256{
         page-break-after: always;
@@ -107,7 +172,6 @@ div.label:last-of-type{
     .dymo-30256.chrome-label{
         page-break-after: auto;
     }
-    
     /********** avery 5163 **********/
     .avery-5163:nth-of-type(10){
         page-break-after: always;
