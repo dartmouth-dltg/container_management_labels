@@ -40,5 +40,6 @@ en:
         type: Container Type
       labels:
         label_type_label: Label Type
+        label_type_default: Letter-default
         label_type_dymo-30256: Dymo-30256 # use the label manufacturer and the type here and in the CSS. Note the hyphen!
         label_type_avery-5163: Avery-5163

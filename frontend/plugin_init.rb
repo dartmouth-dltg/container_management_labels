@@ -51,6 +51,13 @@ Rails.application.config.after_initialize do
     AppConfig[:container_management_labels_pagesize] = {}
   end
   
+  # check to see if any page sizes have been defined
+  unless AppConfig.has_key?(:container_management_labels_autoscale)
+    $stderr.puts "WARNING: container_management_labels plugin has no autoscale parameter defined. " +
+    "Defaulting to use autoscale."
+    AppConfig[:container_management_labels_autoscale] = {}
+  end
+  
   # add the default page sizing in any case
   AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
   
