@@ -14,18 +14,21 @@ Rails.application.config.after_initialize do
   end
   
   # define a default set of fields
-  # used as a defualt and as a check against the fields set in config.rb
+  # used as a default and as a check against the fields set in config.rb
   label_default = [
         {"institution_name" => {"checked" => true, "disabled" => false}},
         {"repository_name" => {"checked" => true, "disabled" => false}},
+        {"catalog_location" => {"checked" => true, "disabled" => false}},
         {"resource_id" => {"checked" => true, "disabled" => false}},
+        {"indicator" => {"checked" => true, "disabled" => true}},
         {"resource_title" => {"checked" => true, "disabled" => false}},
         {"agent_name" => {"checked" => true, "disabled" => false}},
         {"series_id" => {"checked" => false, "disabled" => false}},
         {"type" => {"checked" => false, "disabled" => false}},
-        {"indicator" => {"checked" => true, "disabled" => true}},
         {"barcode" => {"checked" => false, "disabled" => false}},
-        {"location" => {"checked" => false, "disabled" => false}},
+        {"records_management_id" => {"checked" => false, "disabled" => false}},
+        {"area" => {"checked" => true, "disabled" => false}},
+        {"location" => {"checked" => true, "disabled" => false}},
         {"location_barcode" => {"checked" => false, "disabled" => false}}
     ]
     

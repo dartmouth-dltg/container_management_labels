@@ -23,3 +23,37 @@ class TopContainersLabelsController < TopContainersController
   end
 end
 
+# add in the indicator range search
+class TopContainersController
+
+  private
+  
+  alias old_perform_search perform_search
+
+  def perform_search
+    unless params[:indicator].blank?
+      unless params[:q].blank?
+        params[:q] = "#{params[:q]} AND "
+      end
+      
+      #convert the range into a set of indicators since indicators are defined as strings and we need exact matches
+      if params[:indicator].include? "TO"
+        range = params[:indicator].split
+          .find_all{|e| e[/\d+/]}
+          .each{|e| e.gsub!(/\[|\]/,'').to_i}
+          
+        indicators = (range[0]..range[range.length-1]).step(1)
+      # otherwise just split the list up
+      else
+        indicators = params[:indicator].split
+      end
+      
+      # then concatenate with the correct prefix and OR the search
+      indicator_string = indicators.each { |e| e.prepend('indicator_u_sstr:') }.join(" OR ")
+      
+      params[:q] << indicator_string
+    end
+
+    old_perform_search
+  end
+end
