@@ -49,7 +49,7 @@ class TopContainersController
       end
       
       # then concatenate with the correct prefix and OR the search
-      indicator_string = indicators.each { |e| e.prepend('indicator_u_sstr:') }.join(" OR ")
+      indicator_string = indicators.each { |e| e.prepend('indicator_u_stext:') }.join(" OR ")
       
       params[:q] << indicator_string
     end

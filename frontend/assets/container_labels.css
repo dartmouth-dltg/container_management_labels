@@ -137,7 +137,7 @@ div.label:last-of-type{
 /* label specific sizing and layout */
 /* single thermal label on a spool */
 .dymo-30256{
-    height: 90mm;
+    height: 87mm;
     width: 57mm;
 }
 /* standard 2x4 with 10 labels per sheet in portrait mode */
