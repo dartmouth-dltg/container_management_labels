@@ -76,6 +76,10 @@ class LabelData
   def catalog_location_for_top_container(tc)
     tc_cat_loc = tc['collection'][0]['_resolved']['user_defined'] && tc['collection'][0]['_resolved']['user_defined']['enum_1'] ? tc['collection'][0]['_resolved']['user_defined']['enum_1'] : ''
     
+    if tc_cat_loc == 'novalue'
+      tc_cat_loc = ''
+    end
+    
     tc_cat_loc
   end
   

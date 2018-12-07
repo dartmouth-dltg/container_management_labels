@@ -29,9 +29,9 @@ body{
     overflow: scroll;
 }
 div.label > div{
-    font-size: 90%;
+    font-size: 100%;
     height: auto;
-    margin: 0 auto;
+    margin: 3px auto;
     text-align: center;
     width: 95%;
 }
@@ -39,7 +39,7 @@ div.label .insitution_name{
     font-size: 120%;
 }
 div.label .repository_name{
-    font-size: 75%;
+    font-size: 90%;
 }
 div.label .institution_name,
 div.label .repository_name{
@@ -50,7 +50,7 @@ div.label .type{
     background-color: #222;
     border-bottom: 1px solid #666;
     color: #fff;
-    font-size: 90%;
+    font-size: 100%;
     padding: 2px 0;
 }
 div.label .resource_id{
@@ -59,6 +59,7 @@ div.label .resource_id{
     color: #fff;
     font-weight: 500;
     font-size: 140%;
+    margin-bottom: 0;
     padding: 5px 0;
 }
 div.label .agent_name{
@@ -67,6 +68,7 @@ div.label .agent_name{
     padding: 2px 0;
 }
 /* demonstrates how to add a custom glyphicon icon to a label element */
+/* 
 div.label .agent_name::before{
     content: "\E008";
     -moz-osx-font-smoothing: grayscale;
@@ -80,27 +82,34 @@ div.label .agent_name::before{
     position: relative;
     top: 1px;
 }
+ */
 div.label .indicator{
     background-color: #222;
     color: #fff;
     font-weight: 900;
     font-size: 150%;
+    margin-top: 0;
     max-height: 100px;
     padding: 5px 0;
 }
 div.label .resource_title{
     font-weight: bold;
-    font-size: 85%;
+    font-size: 100%;
 }
 div.label .location{
     background-color: #efefef;
     font-size: 140% !important;
     font-weight: bold;
+    margin-top: 0;
     padding: 5px 0;
 }
 div.label .area{
     background-color: #efefef;
+    margin-bottom: 0;
+    margin-top: 10px;
+    padding: 5px 0 0 0;
 }
+/*
 div.label .area::before{
     content: "\E062";
     -moz-osx-font-smoothing: grayscale;
@@ -114,6 +123,7 @@ div.label .area::before{
     position: relative;
     top: 1px;
 }
+*/
 div.records_management_id{
     background-color: #efefef;
     padding: 3px 0;
