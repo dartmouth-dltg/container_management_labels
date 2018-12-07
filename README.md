@@ -40,10 +40,8 @@ additional fields are set in the model (backend/model/label_data.rb)
     resource_id
     resource_title
     agent_name
-    series_id
     type
     indicator
-    barcode
     location
     location_barcode
     
