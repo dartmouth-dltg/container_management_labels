@@ -7,7 +7,7 @@
   </div>
 
   <div class="col-md-12" style="padding: 30px;">
-    <h1><%= I18n.t("top_container._plural") %></h1>
+    <h3><%= I18n.t("top_container._plural") %></h3>
     <%= form_tag(form_target, {:class => "form-horizontal", :id => "bulk_operation_form"}) do |f| %>
       <div class="form-group">
         <label class="control-label col-sm-2" for="q"><%= I18n.t("top_container._frontend.bulk_operations.keyword_criteria") %></label>
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="q"><%= I18n.t("top_container._frontend.bulk_operations.barcodes_criteria") %></label>
+        <label class="control-label col-sm-2" for="barcodes"><%= I18n.t("top_container._frontend.bulk_operations.barcodes_criteria") %></label>
         <div class="controls col-sm-8">
           <%= text_field_tag "barcodes", params["barcodes"], :class => "form-control" %>
         </div>
@@ -46,19 +46,19 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="location"><%= I18n.t("top_container.exported_to_ils") %></label>
+        <label class="control-label col-sm-2" for="exported"><%= I18n.t("top_container.exported_to_ils") %></label>
         <div class="controls col-sm-4">
           <select name="exported" class="form-control"><option></option><option value="yes"><%= I18n.t("top_container._frontend.bulk_operations.exported_to_ils_true") %></option><option value="no"><%= I18n.t("top_container._frontend.bulk_operations.exported_to_ils_false") %></option></select>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="location"><%= I18n.t("top_container._frontend.bulk_operations.empty") %></label>
+        <label class="control-label col-sm-2" for="empty"><%= I18n.t("top_container._frontend.bulk_operations.empty") %></label>
         <div class="controls col-sm-4">
           <select name="empty" class="form-control"><option></option><option value="yes"><%= I18n.t("top_container._frontend.bulk_operations.empty_true") %></option><option value="no"><%= I18n.t("top_container._frontend.bulk_operations.empty_false") %></option></select>
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="q"><%= I18n.t("top_container.indicator") %></label>
+        <label class="control-label col-sm-2" for="indicator"><%= I18n.t("top_container.indicator") %></label>
         <div class="controls col-sm-8">
           <%= text_field_tag "indicator", params["indicator"], :style => "width: 100%;", :class => "form-control", :placeholder => I18n.t("top_container_labels._frontend.bulk_operations.indicator_search_hint") %>
         </div>

@@ -22,8 +22,15 @@
              mid = (field_count/2).ceil
           %>
           <div class="col-sm-3 col-md-offset-1">
+          <% barcode_status = false %>
           <% AppConfig[:container_management_labels].each_with_index do |hash, index| %>
             <% hash.each do |key, val| %>
+              <% 
+                unless barcode_status
+                  barcode_status = key.include? "barcode" ? true : false
+                end
+              %>
+
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="<%= key %>" value="true" <%= val['checked'] ? "checked" : "" %> <%= val['disabled'] ? "disabled" : "" %>>
@@ -79,24 +86,28 @@
             <% end %>
             </select>
           </div>
-          <div class="control-label col-sm-2" for="barcode_type">
-            <%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_label") %>
-          </div>
-          <div class="controls col-sm-3">
-            <select class="form-control" name="barcode_type">
-              <option value="codabar"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_codabar") %></option>
-              <option value="code11"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code11") %></option>
-              <option value="code39"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code39") %></option>
-              <option value="code93"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code93") %></option>
-              <option value="code128"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code128") %></option>
-              <option value="ean8"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean8") %></option>
-              <option value="ean13"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean13") %></option>
-              <option value="std25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_std25") %></option>
-              <option value="int25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_int25") %></option>
-              <option value="msi"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_msi") %></option>
-              <option value="datamatrix"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_datamatrix") %></option>
-            </select>
-          </div>
+          
+          <% if barcode_status %>
+            <div class="control-label col-sm-2" for="barcode_type">
+              <%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_label") %>
+            </div>
+            <div class="controls col-sm-3">
+              <select class="form-control" name="barcode_type">
+                <option value="codabar"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_codabar") %></option>
+                <option value="code11"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code11") %></option>
+                <option value="code39"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code39") %></option>
+                <option value="code93"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code93") %></option>
+                <option value="code128"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_code128") %></option>
+                <option value="ean8"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean8") %></option>
+                <option value="ean13"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_ean13") %></option>
+                <option value="std25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_std25") %></option>
+                <option value="int25"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_int25") %></option>
+                <option value="msi"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_msi") %></option>
+                <option value="datamatrix"><%= I18n.t("top_container_labels._frontend.barcodes.barcode_type_datamatrix") %></option>
+              </select>
+            </div>
+          <% end %>
+          
         </div>
 
         <div id="labels_to_print"></div>

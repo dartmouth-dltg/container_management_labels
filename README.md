@@ -1,4 +1,4 @@
-Container Management Label Addon
+Container Management Label Plugin
 ================================
 
 ArchivesSpace plugin to add the ability to print labels within the browser to ArchivesSpace.
@@ -30,10 +30,10 @@ including an entry such as:
 
 The labels that are available to print from within the browser are defined in two (2) plugin files and the config.rb file.
 
-#### config.rb file
+### config.rb file
 
 Define the fields and order in which they should appear on the label. The fields must be a member of the following list unless
-additional fields are set in the model (backend/model/label_data.rb)
+additional fields are set in the model (`backend/model/label_data.rb`)
 
     institution_name
     repository_name
@@ -42,7 +42,9 @@ additional fields are set in the model (backend/model/label_data.rb)
     agent_name
     type
     indicator
+    barcode
     location
+    area
     location_barcode
     
 Each key should also indicate whether the field will be a default ("checked" => true) and whether the end user
@@ -86,7 +88,7 @@ config file does not contain the :container_management_labels key.
     ]
 
 
-##### Label sizes for container_management_labels plugin.
+#### Label sizes for container_management_labels plugin.
 Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
 
     AppConfig[:container_management_labels_pagesize] = {
@@ -101,7 +103,7 @@ Label keys should match those used in the en.yml file in the plugin and should d
 If no label sizes are defined, the plugin will default to a letter size with 0.25in margins (defined in plugin_init.rb).
 The keys should be named the same as in the CSS and the translation yml (below).
 
-##### Autoscaling can also be turned on or off from the config file.
+#### Autoscaling can also be turned on or off from the config file.
 Autoscaling attempts to scale any label that overflows the defined label area by applying a css transform.
 If "disabled" is set to false, an end user can turn autoscaling on or off on a per use basis.
 
@@ -110,7 +112,7 @@ If "disabled" is set to false, an end user can turn autoscaling on or off on a p
       "disabled" => false
     }
 
-#### /frontend/assets/container_labels.css
+### /frontend/assets/container_labels.css
 
 This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
 of using the label name as a namespace, eg ".dymo-30256". Also note that specific field css must use the same namespace as
@@ -128,7 +130,9 @@ The translations for each label are defined here. Note the hyphen in the label n
 
 ## Fields/Data Displayed
 
-The labels will display the following fields (if data is present):
+The labels will display the following fields 
+(if data is present and the fields are set to display in 
+`AppConfig['container_management_labels']`):
 
     Insititution Name
     Repository name
@@ -139,6 +143,7 @@ The labels will display the following fields (if data is present):
     Top Container Indicator
     Top Container Barcode
     Location Title
+    Location Area
     Location Barcode
 
 ## Barcodes
