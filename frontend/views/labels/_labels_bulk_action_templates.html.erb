@@ -26,8 +26,8 @@
           <% AppConfig[:container_management_labels].each_with_index do |hash, index| %>
             <% hash.each do |key, val| %>
               <% 
-                unless barcode_status
-                  barcode_status = key.include? "barcode" ? true : false
+                unless barcode_status == true
+                  barcode_status = key.include? "barcode"
                 end
               %>
 
