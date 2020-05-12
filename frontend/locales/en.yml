@@ -34,6 +34,8 @@ en:
         institution_name: Parent Institution Name
         location: Location
         location_barcode: Location Barcode
+        print_files: Print File Labels
+        print_files_message: Will print the Top Container Label and all Sub Container Labels
         repository_name: Repository Name
         resource_id: Resource/Accession Identifier
         resource_title: Resource/Accession Title

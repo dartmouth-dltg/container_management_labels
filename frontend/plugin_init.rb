@@ -51,11 +51,18 @@ Rails.application.config.after_initialize do
     AppConfig[:container_management_labels_pagesize] = {}
   end
   
-  # check to see if any page sizes have been defined
+  # check to see if autoscaling has been defined
   unless AppConfig.has_key?(:container_management_labels_autoscale)
     $stderr.puts "WARNING: container_management_labels plugin has no autoscale parameter defined. " +
-    "Defaulting to use autoscale."
+    "Adding default for autoscale."
     AppConfig[:container_management_labels_autoscale] = {}
+  end
+  
+  # check to see if printing files has been defined
+  unless AppConfig.has_key?(:container_management_labels_print_files)
+    $stderr.puts "WARNING: container_management_labels plugin has no print_files parameter defined. " +
+    "Adding default for printing files."
+    AppConfig[:container_management_labels_print_files] = {}
   end
   
   # add the default page sizing in any case

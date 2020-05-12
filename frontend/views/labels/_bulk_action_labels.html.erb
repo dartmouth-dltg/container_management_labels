@@ -19,7 +19,7 @@
       %>
   
       <% labels.each do |label| %>
-        <div class="label <%= params['label_type'] %>
+        <div class="label <%= params['label_type'] %>">
           <% params_new.each do |k,v| %>
             <% if fields.include?(k) %>
               <% if label[k].present? %>

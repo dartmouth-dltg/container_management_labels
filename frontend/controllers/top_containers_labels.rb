@@ -5,8 +5,12 @@ class TopContainersLabelsController < TopContainersController
   set_access_control  "view_repository" => [:show, :typeahead, :bulk_operations_browse, :print_labels]
  
   def print_labels
-    post_uri = "/repositories/#{session[:repo_id]}/top_containers_labels/print_labels"
-
+    if params[:print_files]
+      post_uri = "/repositories/#{session[:repo_id]}/top_containers_labels/print_sub_labels"
+    else
+      post_uri = "/repositories/#{session[:repo_id]}/top_containers_labels/print_labels"
+    end
+    
     response = JSONModel::HTTP.post_form(URI(post_uri), {"record_uris[]" => Array(params[:record_uris])})
 
     results = ASUtils.json_parse(response.body)

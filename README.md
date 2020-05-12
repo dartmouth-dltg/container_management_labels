@@ -112,6 +112,29 @@ If "disabled" is set to false, an end user can turn autoscaling on or off on a p
       "disabled" => false
     }
 
+#### Printing Files (and other sub container labels) can also be turned on or off from the config file.
+Allows the user to print files (or other subcontainer labels). This will print labels for all
+subcontainers associated with the top containers selected or may be filtered to only
+archival objects whose level is set by the list below.
+If "disabled" is set to false, an end user can turn printing files on or off on a per use basis.
+
+    AppConfig[:container_management_labels_print_files] = {
+      "checked" => true,
+      "disabled" => false
+    }
+    
+#### Printing Files (and other sub container labels) can also be set to only print specific levels.
+Set this array to include the value of the archival object level that you want to print subcontainer
+labels for. Acceptable values are 
+```
+["class", "collection", "file", "fonds", "item", 
+"otherlevel", "recordgrp", "series", "subfonds", 
+"subgrp", "subseries"]
+ ```  
+To set it to print file level labels only:
+
+    AppConfig[:container_management_labels_print_levels] = ["file"]
+    
 ### /frontend/assets/container_labels.css
 
 This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
