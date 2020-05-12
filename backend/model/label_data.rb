@@ -75,13 +75,14 @@ class LabelData
         sc_ind = []
         sc_ind.push(tc["type"].capitalize + " " + tc["indicator"])
         
-        # if there is no type2, replace it with the level
+        # if there is no type2, replace it with the title
         # this will cover AOs without child indicators
-        # if there is a type2, then concat that with indicator2
+        # otherwise, if there is a type2, then concat that with indicator2
         # same for type3 and indicator3
-        # we should end up with an array that looks like: ["Box 1", "File 2", Item 3"]
+        # we should end up with an array that looks like: ["Box 1", "File 2", Item 3"] or ["{FILE_TITLE}"]
+        
         if ao["type2"].nil?
-          ao["type2"] = ao["level"].capitalize
+          ao["type2"] = ao["title"]
         else
           unless ao["indicator2"].nil?
             sc_ind.push(ao["type2"].capitalize + " " + ao["indicator2"])
@@ -188,6 +189,7 @@ class LabelData
       filter(:top_container__id => ids).
       select(Sequel.as(:archival_object__id, :ao_id),
              Sequel.as(:archival_object__level_id, :level),
+             Sequel.as(:archival_object__title, :ao_title),
              Sequel.as(:sub_container__type_2_id, :type2),
              Sequel.as(:sub_container__indicator_2, :indicator2),
              Sequel.as(:sub_container__type_3_id, :type3),
@@ -196,6 +198,7 @@ class LabelData
 
       result[row[:top_container_id]] ||= []
       result[row[:top_container_id]] << {"ao_id" => row[:ao_id],
+                                         "ao_title" => row[:ao_title],
                                          "level" => row[:level].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:level]).get(:value),
                                          "type2" => row[:type2].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:type2]).get(:value),
                                          "indicator2" => row[:indicator2],
