@@ -17,7 +17,6 @@ Rails.application.config.after_initialize do
   label_default = [
         {"institution_name" => {"checked" => true, "disabled" => false}},
         {"repository_name" => {"checked" => true, "disabled" => false}},
-        {"catalog_location" => {"checked" => true, "disabled" => false}},
         {"resource_id" => {"checked" => true, "disabled" => false}},
         {"indicator" => {"checked" => true, "disabled" => true}},
         {"resource_title" => {"checked" => true, "disabled" => false}},
@@ -25,7 +24,6 @@ Rails.application.config.after_initialize do
         {"series_id" => {"checked" => false, "disabled" => false}},
         {"type" => {"checked" => false, "disabled" => false}},
         {"barcode" => {"checked" => false, "disabled" => false}},
-        {"records_management_id" => {"checked" => false, "disabled" => false}},
         {"area" => {"checked" => true, "disabled" => false}},
         {"location" => {"checked" => true, "disabled" => false}},
         {"location_barcode" => {"checked" => false, "disabled" => false}}
@@ -53,11 +51,25 @@ Rails.application.config.after_initialize do
     AppConfig[:container_management_labels_pagesize] = {}
   end
   
-  # check to see if any page sizes have been defined
+  # check to see if autoscaling has been defined
   unless AppConfig.has_key?(:container_management_labels_autoscale)
     $stderr.puts "WARNING: container_management_labels plugin has no autoscale parameter defined. " +
-    "Defaulting to use autoscale."
+    "Adding default for autoscale."
     AppConfig[:container_management_labels_autoscale] = {}
+  end
+  
+  # check to see if printing files has been defined
+  unless AppConfig.has_key?(:container_management_labels_print_files)
+    $stderr.puts "WARNING: container_management_labels plugin has no print_files parameter defined. " +
+    "Adding default for printing files."
+    AppConfig[:container_management_labels_print_files] = {}
+  end
+  
+  # check to see if archival object print levels has been set
+  unless AppConfig.has_key?(:container_management_labels_print_levels)
+    $stderr.puts " WARNING: container management_labels plugin has no print_levels parameter defined. " +
+    "Setting default to print file labels only."
+    AppConfig[:container_management_labels_print_levels] = ["file"]
   end
   
   # add the default page sizing in any case
