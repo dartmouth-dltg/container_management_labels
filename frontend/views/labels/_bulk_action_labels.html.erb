@@ -15,7 +15,7 @@
         fields = AppConfig[:container_management_labels].map{|h| h.keys}.flatten
         
         # make sure the params are ordered the same as the fields set in the config
-        params_new = Hash[params.permit(fields).to_h.to_a.sort_by{|param| fields.index(param)}]
+        params_new = Hash[params.to_a.sort_by{|param| fields.index(param)}]
       %>
   
       <% labels.each do |label| %>
