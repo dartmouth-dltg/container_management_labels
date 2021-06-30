@@ -73,8 +73,11 @@ class LabelData
         
         # replace the tc indicator with a concatted string from the subcontainer
         sc_ind = []
-        sc_ind.push(tc["type"].capitalize + " " + tc["indicator"])
-        
+        if tc['type']
+          sc_ind.push(tc["type"].capitalize + " " + tc["indicator"])
+        else
+          sc_ind.push(tc["indicator"])
+        end        
         # if there is no type2, replace it with the title
         # this will cover AOs without child indicators
         # otherwise, if there is a type2, then concat that with indicator2
