@@ -64,48 +64,50 @@ class LabelData
       institution, repository = institution_repo_for_top_container(tc)
       
       # if there's an indicator2, then its a sub_container like a file so add it to the sub_container labels
-      top_container_to_ao_links[top_container_id].each do |ao|
-        
-        # skip this ao if it is not in the list of levels to print
-        if AppConfig[:container_management_labels_print_levels] && AppConfig[:container_management_labels_print_levels].count > 0
-          next unless AppConfig[:container_management_labels_print_levels].include? (ao["level"])
-        end
-        
-        # replace the tc indicator with a concatted string from the subcontainer
-        sc_ind = []
-        if tc['type']
-          sc_ind.push(tc["type"].capitalize + " " + tc["indicator"])
-        else
-          sc_ind.push(tc["indicator"])
-        end        
-        # if there is no type2, replace it with the title
-        # this will cover AOs without child indicators
-        # otherwise, if there is a type2, then concat that with indicator2
-        # same for type3 and indicator3
-        # we should end up with an array that looks like: ["Box 1", "File 2", Item 3"] or ["{FILE_TITLE}"]
-        
-        if ao["type2"].nil?
-          ao["type2"] = ao["title"]
-        else
-          unless ao["indicator2"].nil?
-            sc_ind.push(ao["type2"].capitalize + " " + ao["indicator2"])
+      unless top_container_to_ao_links[top_container_id].nil?
+        top_container_to_ao_links[top_container_id].each do |ao|
+          
+          # skip this ao if it is not in the list of levels to print
+          if AppConfig[:container_management_labels_print_levels] && AppConfig[:container_management_labels_print_levels].count > 0
+            next unless AppConfig[:container_management_labels_print_levels].include? (ao["level"])
           end
-          if !ao["type3"].nil? && !ao["indicator3"].nil?
-            sc_ind.push(ao["type3"].capitalize + " " + ao["indicator3"])
+          
+          # replace the tc indicator with a concatted string from the subcontainer
+          sc_ind = []
+          if tc['type']
+            sc_ind.push(tc["type"].capitalize + " " + tc["indicator"])
+          else
+            sc_ind.push(tc["indicator"])
+          end        
+          # if there is no type2, replace it with the title
+          # this will cover AOs without child indicators
+          # otherwise, if there is a type2, then concat that with indicator2
+          # same for type3 and indicator3
+          # we should end up with an array that looks like: ["Box 1", "File 2", Item 3"] or ["{FILE_TITLE}"]
+          
+          if ao["type2"].nil?
+            ao["type2"] = ao["title"]
+          else
+            unless ao["indicator2"].nil?
+              sc_ind.push(ao["type2"].capitalize + " " + ao["indicator2"])
+            end
+            if !ao["type3"].nil? && !ao["indicator3"].nil?
+              sc_ind.push(ao["type3"].capitalize + " " + ao["indicator3"])
+            end
           end
+          
+          subcontainer_labels << tc.merge({
+                      "sc_indicator" => sc_ind.compact.join(", "),
+                      "agent_name" => agent,
+                      "area" => area,
+                      "location" => location,
+                      "location_barcode" => location_barcode,
+                      "resource_id" => resource_id,
+                      "resource_title" => resource_title,
+                      "institution_name" => institution,
+                      "repository_name" => repository,
+                      })
         end
-        
-        subcontainer_labels << tc.merge({
-                    "sc_indicator" => sc_ind.compact.join(", "),
-                    "agent_name" => agent,
-                    "area" => area,
-                    "location" => location,
-                    "location_barcode" => location_barcode,
-                    "resource_id" => resource_id,
-                    "resource_title" => resource_title,
-                    "institution_name" => institution,
-                    "repository_name" => repository,
-                    })
       end
     end
     
