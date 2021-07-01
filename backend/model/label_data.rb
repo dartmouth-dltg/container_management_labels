@@ -66,7 +66,7 @@ class LabelData
       # if there's an indicator2, then its a sub_container like a file so add it to the sub_container labels
       unless top_container_to_ao_links[top_container_id].nil?
         top_container_to_ao_links[top_container_id].each do |ao|
-          
+        
           # skip this ao if it is not in the list of levels to print
           if AppConfig[:container_management_labels_print_levels] && AppConfig[:container_management_labels_print_levels].count > 0
             next unless AppConfig[:container_management_labels_print_levels].include? (ao["level"])
@@ -185,7 +185,7 @@ class LabelData
     @top_container_json_records.fetch(id)
   end
   
-  # Returns a hash like {123 => {"ao_di" => 456, "level" => File, ...}, ...}, meaning "Top Container 123 links to Archival Object 456 with level_id 789, etc"
+  # Returns a hash like {123 => {"ao_id" => 456, "level" => File, ...}, ...}, meaning "Top Container 123 links to Archival Object 456 with level_id 789, etc"
   def calculate_top_container_linkages(ids)
     result = {}
 
