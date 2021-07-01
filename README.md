@@ -26,6 +26,13 @@ including an entry such as:
      # If you have other plugins loaded, just add 'container_management_labels' to the list
      AppConfig[:plugins] = ['local', 'other_plugins', 'container_management_labels']
      
+Note that this plugin overrides two core views files
+
+    /frontend/views/top_containers/bulk_operations/_search_criteria.html.erb
+    /frontend/views/top_containers/bulk_operations/_toolbar.html.erb
+    
+If you have other plugins that override these same files, you will need to reconcile the two.
+     
 ## Configuring & Modifying
 
 The labels that are available to print from within the browser are defined in two (2) plugin files and the config.rb file.
@@ -49,7 +56,7 @@ additional fields are set in the model (`backend/model/label_data.rb`)
     
 Each key should also indicate whether the field will be a default ("checked" => true) and whether the end user
 should be able to change it ("disabled" => false). The following are the default settings and are set automatically if the
-config file does not contain the :container_management_labels key.
+config file does not contain the `:container_management_labels` key.
     
     AppConfig[:container_management_labels] = [
         {"institution_name" => {
@@ -89,7 +96,8 @@ config file does not contain the :container_management_labels key.
 
 
 #### Label sizes for container_management_labels plugin.
-Label keys should match those used in the en.yml file in the plugin and should define a page size and margin.
+Label keys should match those used in the `en.yml` file in the plugin and should define a 
+page size and margin.
 
     AppConfig[:container_management_labels_pagesize] = {
         "dymo-30256" => {
@@ -100,12 +108,14 @@ Label keys should match those used in the en.yml file in the plugin and should d
             "margin" => "0.5in 0.125in"}
     }
     
-If no label sizes are defined, the plugin will default to a letter size with 0.25in margins (defined in plugin_init.rb).
-The keys should be named the same as in the CSS and the translation yml (below).
+If no label sizes are defined, the plugin will default to a letter size with 0.25in margins 
+(defined in `plugin_init.rb`). The keys should be named the same as in the CSS and the translation 
+yml (below).
 
 #### Autoscaling can also be turned on or off from the config file.
-Autoscaling attempts to scale any label that overflows the defined label area by applying a css transform.
-If "disabled" is set to false, an end user can turn autoscaling on or off on a per use basis.
+Autoscaling attempts to scale any label that overflows the defined label area by applying a 
+css transform. If "disabled" is set to false, an end user can turn autoscaling on or off on a 
+per use basis.
 
     AppConfig[:container_management_labels_autoscale] = {
       "checked" => true,
@@ -139,7 +149,7 @@ To set it to print file level labels only:
 
 This is where the CSS is defined for the label fields and for the specific layouts. Note the convention
 of using the label name as a namespace, eg ".dymo-30256". Also note that specific field css must use the same namespace as
-fields listed in :container_management_labels, eg a class of ".indicator".
+fields listed in `AppConfig[:container_management_labels]`, eg a class of ".indicator".
       
 #### /locales/en.yml
 
@@ -170,6 +180,10 @@ The labels will display the following fields
     Location Barcode
 
 ## Barcodes
+
+Barcodes can be turned off by omitting both of the barcode keys in 
+`AppConfig[::container_management_labels]` I.E. omit the entries for `barcode` and 
+`location_barcode`
 
 The barcodes are generated using the jQuery barcode plugin from http://barcode-coder.com/en/barcode-jquery-plugin-201.html
 The following barcode types are available - codabar is the default type:
