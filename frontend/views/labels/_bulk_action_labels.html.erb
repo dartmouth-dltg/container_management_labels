@@ -13,11 +13,12 @@
       <%
         # get the fields that we want to include
         fields = AppConfig[:container_management_labels].map{|h| h.keys}.flatten
-        
+
         # make sure the params are ordered the same as the fields set in the config
-         params_new = Hash[params.permit(fields).to_h.to_a.sort_by{|param| fields.index(param)}]
+        params.permit(:rm_label, :label_type, :barcode_type, :autoscale)
+        params_new = Hash[params.permit(fields).to_h.to_a.sort_by{|param| fields.index(param)}]
       %>
-  
+
       <% labels.each do |label| %>
         <div class="label <%= params['label_type'] %>">
           <% params_new.each do |k,v| %>
@@ -34,17 +35,17 @@
         </div>
       <% end %>
     </div>
-  
+
     <script type="text/javascript">
-      var barcodeType = "<%= params_new['barcode_type'] %>";
-      var autoScale = "<%= params_new['auto-scale'] %>";
+      var barcodeType = "<%= params['barcode_type'] %>";
+      var autoScale = "<%= params['auto-scale'] %>";
     </script>
     <style type="text/css">
         @page {
-          size: <%= AppConfig[:container_management_labels_pagesize][params_new['label_type']]['size'] rescue AppConfig[:container_management_labels_pagesize]['default']['size'] %>;
-          margin: <%= AppConfig[:container_management_labels_pagesize][params_new['label_type']]['margin']  rescue AppConfig[:container_management_labels_pagesize]['default']['margin']%>;
+          size: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['size'] rescue AppConfig[:container_management_labels_pagesize]['default']['size'] %>;
+          margin: <%= AppConfig[:container_management_labels_pagesize][params['label_type']]['margin']  rescue AppConfig[:container_management_labels_pagesize]['default']['margin']%>;
         }
     </style>
-    
+
   </body>
 </html>
