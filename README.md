@@ -4,6 +4,17 @@ Container Management Label Plugin
 ArchivesSpace plugin to add the ability to print labels within the browser to ArchivesSpace.
 It is compatible with ArchivesSpace v1.5.1+ (See different releases for different versions)
 
+## Note
+
+For ArchivesSpace versions 2.7.1+, please use the correct code branch rather than using a packaged release
+
+    ArchivesSpace v2.7.1 => main
+    ArchivesSpace v2.8.0 => as-280
+    ArchivesSpace v2.8.1 => as-281
+    ArchivesSpace v3.0.0 - v3.2.0 => as-300
+
+## Overview
+
 This plugin was originally a fork of https://github.com/hudmol/container_management
 
 The plugin adds a new option to the Bulk Operations menu in the Manage Top Containers view. The new menu option allows
