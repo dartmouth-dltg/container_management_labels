@@ -6,12 +6,8 @@ It is compatible with ArchivesSpace v1.5.1+ (See different releases for differen
 
 ## Note
 
-For ArchivesSpace versions 2.7.1+, please use the correct code branch rather than using a packaged release
-
-    ArchivesSpace v2.7.1 => main
-    ArchivesSpace v2.8.0 => as-280
-    ArchivesSpace v2.8.1 => as-281
-    ArchivesSpace v3.0.0 - v3.2.0 => as-300
+Please see release notes to ensure you are using the correct version of the plugin for your
+version of ArchivesSpace.
 
 ## Overview
 
