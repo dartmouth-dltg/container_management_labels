@@ -74,19 +74,5 @@ Rails.application.config.after_initialize do
   
   # add the default page sizing in any case
   AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
-  
-  ActionView::PartialRenderer.class_eval do
-    alias_method :render_labels, :render
-    def render(context, options, block)
-      result = render_labels(context, options, block);
-
-      # Add our location-specific templates to shared/templates
-      if options[:partial] == "shared/templates"
-        result += render(context, options.merge(:partial => "labels/labels_bulk_action_templates"), nil)
-      end
-
-      result
-    end
-  end
 
 end

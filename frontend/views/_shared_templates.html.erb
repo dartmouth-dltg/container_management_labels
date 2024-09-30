@@ -1,7 +1,7 @@
 <div id="labels_bulk_action_print_labels"><!--
   <%= form_tag({:controller => :top_containers_labels, :action => :print_labels}, {:class => "form-horizontal", :id => "print_labels_form", :target => "_blank" }) do |f| %>
     <div class="modal-body">
-        <div class="selected-record-list well">
+        <div class="selected-record-list">
         <h4><%= I18n.t("top_container_labels._frontend.bulk_operations.print_labels_help") %></h4>
             <ul>
                 {for container in selection}
@@ -12,7 +12,7 @@
                 {/for}
             </ul>
         </div>
-        <div class="form-group well">
+        <div class="row">
             <div class="col-sm-12">
             <h4><%= I18n.t("top_container_labels._frontend.fields.field_header") %></h4>
               <p><%= I18n.t("top_container_labels._frontend.fields.fields_message") %><p>
@@ -21,7 +21,7 @@
           <% field_count = AppConfig[:container_management_labels].length
              mid = (field_count/2).ceil
           %>
-          <div class="col-sm-3 col-md-offset-1">
+          <div class="col-sm">
           <% barcode_status = false %>
           <% AppConfig[:container_management_labels].each_with_index do |hash, index| %>
             <% hash.each do |key, val| %>
@@ -43,7 +43,7 @@
             <% end %>
             <% if index == mid %>
               </div>
-              <div class="col-sm-3 col-md-offset-1">
+              <div class="col-sm">
             <% end %>
           <% end %>
           </div>
@@ -120,7 +120,7 @@
         <div id="labels_to_print"></div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-default"><%= I18n.t("top_container_labels._frontend.bulk_operations.print_n_labels", {:n => "${selection.length}"}) %></button>
+        <button type="submit" class="btn btn-default"><%= I18n.t("top_container_labels._frontend.bulk_operations.print_n_labels", n: "${selection.length}") %></button>
         <button class="btn btn-cancel btn-default" data-dismiss="modal"><%= I18n.t("actions.cancel") %></button>
     </div>
     <style type="text/css">
