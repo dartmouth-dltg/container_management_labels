@@ -51,7 +51,7 @@
             <div class="col-sm-12">
               <h4><%= I18n.t("top_container_labels._frontend.fields.auto_scale_header") %></h4>
               <p><%= I18n.t("top_container_labels._frontend.fields.auto_scale_message") %>
-              <label>
+              <label class="ml-3">
                 <input type="checkbox" name="auto-scale" value="true" <%= AppConfig[:container_management_labels_autoscale]['checked'] ? "checked" : "" %> <%= AppConfig[:container_management_labels_autoscale]['disabled'] ? "disabled" : "" %>>
                 <%= I18n.t("top_container_labels._frontend.fields.auto_scale") %>
               </label>
@@ -65,7 +65,7 @@
             <div class="col-sm-12">
               <h4><%= I18n.t("top_container_labels._frontend.fields.print_files") %></h4>
               <p><%= I18n.t("top_container_labels._frontend.fields.print_files_message") %>
-              <label>
+              <label class="ml-3">
                 <input type="checkbox" name="print_files" value="true" <%= AppConfig[:container_management_labels_print_files]['checked'] ? "checked" : "" %> <%= AppConfig[:container_management_labels_print_files]['disabled'] ? "disabled" : "" %>>
                 <%= I18n.t("top_container_labels._frontend.fields.print_files") %>
               </label>
