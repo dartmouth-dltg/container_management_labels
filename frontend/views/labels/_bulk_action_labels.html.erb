@@ -15,8 +15,18 @@
         fields = AppConfig[:container_management_labels].map{|h| h.keys}.flatten
 
         # make sure the params are ordered the same as the fields set in the config
-        params.permit(:rm_label, :label_type, :barcode_type, :autoscale)
-        params_new = Hash[params.permit(fields).to_h.to_a.sort_by{|param| fields.index(param)}]
+        params_new = Hash[params.permit(:rm_label, :label_type, :barcode_type, :autoscale, :location_display, fields).to_h.to_a.sort_by{|param| fields.index(param)}]
+      %>
+      <%
+        if params_new['rm_label'] == 'true'
+          # sort by location if records management labels are requested
+          labels.sort! { |a,b| a['location'] <=> b['location'] }
+
+          # include location display field instead of location coordinates
+          params_new['location_display'] = 'true'
+          fields << 'location_display'
+          fields.delete('location')
+        end
       %>
 
       <% labels.each do |label| %>
@@ -26,6 +36,12 @@
               <% if label[k].present? %>
                 <% if k.include?("barcode") %>
                   <div class="<%= k %>" data="<%= label[k] %>"></div>
+                <% elsif k.include?("location_display") %>
+                  <div class="<%= k %>">
+                    <% label[k].split(',').each do |lt| %>
+                      <div><%= lt.gsub(/\[|\]/i, '').strip %></div>
+                    <% end %>
+                  </div>
                 <% else %>
                   <div class="<%= k %>"><%= k.include?("type") ? label[k].titlecase : label[k] %></div>
                 <% end %>

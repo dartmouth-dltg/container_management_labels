@@ -36,6 +36,10 @@ en:
         location_barcode: Location Barcode
         print_files: Print File Labels
         print_files_message: Will print Sub Container Labels - i.e. Files, Items, etc.
+        records_management: Print Records Management Labels
+        records_management_header: Records Management
+        records_management_id: Records Management ID
+        records_management_message: Check this box if printing labels for Records Management Transfers
         repository_name: Repository Name
         resource_id: Resource/Accession Identifier
         resource_title: Resource/Accession Title

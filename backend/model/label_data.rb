@@ -24,15 +24,18 @@ class LabelData
     ids.each do |top_container_id|
       tc = fetch_top_container(top_container_id)
       agent = agent_for_top_container(tc)
-      area, location, location_barcode = location_for_top_container(tc)
+      area, location, location_barcode, location_display = location_for_top_container(tc)
       resource_id, resource_title = resource_for_top_container(tc)
       institution, repository = institution_repo_for_top_container(tc)
+      rm_id = find_rm_id_from_tc(top_container_id)
 
       labels << tc.merge({
                   "agent_name" => agent,
                   "area" => area,
                   "location" => location,
                   "location_barcode" => location_barcode,
+                  "location_display" => location_display,
+                  "records_management_id" => rm_id,
                   "resource_id" => resource_id,
                   "resource_title" => resource_title,
                   "institution_name" => institution,
@@ -59,7 +62,7 @@ class LabelData
     ids.each do |top_container_id|
       tc = fetch_top_container(top_container_id)
       agent = agent_for_top_container(tc)
-      area, location, location_barcode = location_for_top_container(tc)
+      area, location, location_barcode, location_display = location_for_top_container(tc)
       resource_id, resource_title = resource_for_top_container(tc)
       institution, repository = institution_repo_for_top_container(tc)
       
@@ -102,6 +105,8 @@ class LabelData
                       "area" => area,
                       "location" => location,
                       "location_barcode" => location_barcode,
+                      "location_display" => location_display,
+                      "records_management_id" => ao["records_management_id"],
                       "resource_id" => resource_id,
                       "resource_title" => resource_title,
                       "institution_name" => institution,
@@ -122,7 +127,7 @@ class LabelData
   
   private
   
-  # returns an agent name if a creator exists for the colelction linked to the top container
+  # returns an agent name if a creator exists for the collection linked to the top container
   def agent_for_top_container(tc)
     agent_names = []
     # resolve the linked agents
@@ -147,8 +152,9 @@ class LabelData
     area = loc['area'] ? loc['area'] : ''
     location = ['coordinate_1_indicator', 'coordinate_2_indicator', 'coordinate_3_indicator'].map {|fld| loc[fld]}.compact.join(' ')
     location_barcode = loc['barcode'] ? loc['barcode'] : ''
+    location_display = loc['title'] ? loc['title'] : ''
 
-    return area, location, location_barcode        
+    return area, location, location_barcode, location_display
   end
   
   # returns two semicolon concatenated lists of all resource title and resource ids inked to the top container
@@ -184,7 +190,40 @@ class LabelData
   def fetch_top_container(id)
     @top_container_json_records.fetch(id)
   end
-  
+
+  def find_rm_id(ext_ids)
+    rms_source = AppConfig[:container_management_rms_source]
+    unless ext_ids.nil?
+      rm = ext_ids.select{|e| e['source'] == rms_source}.first
+    end
+
+    # Remove the leading "box_" from the RM ID as we don't need to display that
+    rm_id = rm.nil? ? nil : rm['external_id'].sub(/^box_/,'')
+
+    rm_id
+  end
+
+  def find_rm_id_from_tc(tc_id)
+    result = {}
+
+    TopContainer.linked_instance_ds.
+      join(:archival_object, :id => :instance__archival_object_id).
+      filter(:top_container__id => tc_id.to_i).
+      select(Sequel.as(:archival_object__id, :ao_id)).each do |row|
+        begin
+          rm_id = find_rm_id(ArchivalObject.sequel_to_jsonmodel(ArchivalObject.filter(:id => row[:ao_id]).all).first['external_ids'])
+        rescue
+          rm_id = nil
+        end
+        result["#{tc_id}"] ||= []
+        result["#{tc_id}"] << {
+          "records_management_id" => rm_id
+        }
+      end
+
+    result
+  end
+ 
   # Returns a hash like {123 => {"ao_id" => 456, "level" => File, ...}, ...}, meaning "Top Container 123 links to Archival Object 456 with level_id 789, etc"
   def calculate_top_container_linkages(ids)
     result = {}
@@ -201,9 +240,15 @@ class LabelData
              Sequel.as(:sub_container__indicator_3, :indicator3),
              Sequel.as(:top_container__id, :top_container_id)).each do |row|
 
-      result[row[:top_container_id]] ||= []
-      result[row[:top_container_id]] << {"ao_id" => row[:ao_id],
+        begin
+          rm_id = find_rm_id(ArchivalObject.sequel_to_jsonmodel(ArchivalObject.filter(:id => row[:ao_id]).all).first['external_ids'])
+        rescue
+          rm_id = nil
+        end
+        result[row[:top_container_id]] ||= []
+        result[row[:top_container_id]] << {"ao_id" => row[:ao_id],
                                          "ao_title" => row[:ao_title],
+                                         "records_management_id" => rm_id,
                                          "level" => row[:level].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:level]).get(:value),
                                          "type2" => row[:type2].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:type2]).get(:value),
                                          "indicator2" => row[:indicator2],

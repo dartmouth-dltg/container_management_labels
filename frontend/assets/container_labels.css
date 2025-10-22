@@ -96,7 +96,8 @@ div.label .resource_title{
     font-weight: bold;
     font-size: 100%;
 }
-div.label .location{
+div.label .location,
+div.label .location_display {
     background-color: #efefef;
     font-size: 140% !important;
     font-weight: bold;
