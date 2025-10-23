@@ -24,6 +24,8 @@
 
           # include location display field instead of location coordinates
           params_new['location_display'] = 'true'
+          params_new['records_management_id'] = 'true'
+          fields << 'records_management_id'
           fields << 'location_display'
           fields.delete('location')
         end
@@ -39,7 +41,7 @@
                 <% elsif k.include?("location_display") %>
                   <div class="<%= k %>">
                     <% label[k].split(',').each do |lt| %>
-                      <div><%= lt.gsub(/\[|\]/i, '').strip %></div>
+                      <div><%= lt.strip %></div>
                     <% end %>
                   </div>
                 <% else %>

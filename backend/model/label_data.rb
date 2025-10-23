@@ -152,9 +152,9 @@ class LabelData
     area = loc['area'] ? loc['area'] : ''
     location = ['coordinate_1_indicator', 'coordinate_2_indicator', 'coordinate_3_indicator'].map {|fld| loc[fld]}.compact.join(' ')
     location_barcode = loc['barcode'] ? loc['barcode'] : ''
-    location_display = loc['title'] ? loc['title'] : ''
+    rm_location_display = "#{loc['coordinate_1_label']} #{loc['coordinate_1_indicator']}, #{loc['coordinate_2_label']} #{loc['coordinate_2_indicator']}"
 
-    return area, location, location_barcode, location_display
+    return area, location, location_barcode, rm_location_display
   end
   
   # returns two semicolon concatenated lists of all resource title and resource ids inked to the top container
@@ -204,7 +204,7 @@ class LabelData
   end
 
   def find_rm_id_from_tc(tc_id)
-    result = {}
+    rm_id = nil
 
     TopContainer.linked_instance_ds.
       join(:archival_object, :id => :instance__archival_object_id).
@@ -215,13 +215,9 @@ class LabelData
         rescue
           rm_id = nil
         end
-        result["#{tc_id}"] ||= []
-        result["#{tc_id}"] << {
-          "records_management_id" => rm_id
-        }
       end
 
-    result
+    rm_id
   end
  
   # Returns a hash like {123 => {"ao_id" => 456, "level" => File, ...}, ...}, meaning "Top Container 123 links to Archival Object 456 with level_id 789, etc"
