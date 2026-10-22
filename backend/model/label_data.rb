@@ -3,18 +3,23 @@ class LabelData
 
   include JSONModel
 
-  attr_accessor :labels, :sub_labels
-
   def initialize(uris)
-    @uris = uris
-    @labels = build_label_data
-    @sub_labels = build_subcontainer_data
+    @ids = uris.map {|uri| JSONModel(:top_container).id_for(uri)}.uniq
+  end
+
+  # built on demand so each endpoint only does the work it needs
+  def labels
+    @labels ||= build_label_data
+  end
+
+  def sub_labels
+    @sub_labels ||= build_subcontainer_data
   end
 
   def build_label_data
 
-    ids = @uris.map {|uri| JSONModel(:top_container).id_for(uri)}
-    
+    ids = @ids
+
     # Eagerly load all of the Top Containers we'll be working with
     load_top_containers(ids)
     
@@ -45,8 +50,8 @@ class LabelData
   
   def build_subcontainer_data
     
-    ids = @uris.map {|uri| JSONModel(:top_container).id_for(uri)}
-    
+    ids = @ids
+
     # Eagerly load all of the Top Containers we'll be working with
     load_top_containers(ids)
     
@@ -177,7 +182,15 @@ class LabelData
   end
   
   def load_top_containers(ids)
-    top_container_list = TopContainer.filter(:id => ids).all
+    return if @top_container_json_records
+
+    top_container_list = TopContainer.filter(:id => ids, :repo_id => RequestContext.get(:repo_id)).all
+
+    # nil ids come from malformed uris; missing ones from unknown or other-repo containers
+    if ids.include?(nil) || top_container_list.length != ids.length
+      raise NotFoundException.new("One or more top containers could not be found")
+    end
+
     top_container_json_records = Hash[TopContainer.sequel_to_jsonmodel(top_container_list).map {|tc| [tc.id, tc.to_hash(:trusted)]}]
 
     @top_container_json_records = URIResolver.resolve_references(top_container_json_records, ['container_locations','repository','collection'])
@@ -189,9 +202,7 @@ class LabelData
   
   # Returns a hash like {123 => {"ao_id" => 456, "level" => File, ...}, ...}, meaning "Top Container 123 links to Archival Object 456 with level_id 789, etc"
   def calculate_top_container_linkages(ids)
-    result = {}
-
-    TopContainer.linked_instance_ds.
+    rows = TopContainer.linked_instance_ds.
       join(:archival_object, :id => :instance__archival_object_id).
       filter(:top_container__id => ids).
       select(Sequel.as(:archival_object__id, :ao_id),
@@ -201,15 +212,20 @@ class LabelData
              Sequel.as(:sub_container__indicator_2, :indicator2),
              Sequel.as(:sub_container__type_3_id, :type3),
              Sequel.as(:sub_container__indicator_3, :indicator3),
-             Sequel.as(:top_container__id, :top_container_id)).each do |row|
+             Sequel.as(:top_container__id, :top_container_id)).all
 
+    # resolve all enumeration ids in one query rather than one per row
+    enum_values = BackendEnumSource.values_for_ids(rows.flat_map {|row| [row[:level], row[:type2], row[:type3]]}.compact.uniq)
+
+    result = {}
+    rows.each do |row|
       result[row[:top_container_id]] ||= []
       result[row[:top_container_id]] << {"ao_id" => row[:ao_id],
                                          "ao_title" => row[:ao_title],
-                                         "level" => row[:level].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:level]).get(:value),
-                                         "type2" => row[:type2].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:type2]).get(:value),
+                                         "level" => enum_values[row[:level]],
+                                         "type2" => enum_values[row[:type2]],
                                          "indicator2" => row[:indicator2],
-                                         "type3" => row[:type3].nil? ? nil : EnumerationValue.filter(:enumeration_value__id => row[:type3]).get(:value),
+                                         "type3" => enum_values[row[:type3]],
                                          "indicator3" => row[:indicator3]
                                          }
     end
