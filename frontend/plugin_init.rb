@@ -8,16 +8,6 @@ end
 
 Rails.application.config.after_initialize do
   
-  begin
-    JSONModel(:top_container)
-  rescue
-    puts("Couldn't find JSONModel(:top_container)\n" +
-         "\n" +
-         "The container_management_labels plugin depends on container_management. Be sure to include the container_management plugin or to be running ArchivesSpace v1.5 or greater.\n\n" +
-         "Please check your configuration and try again.")
-    raise "Plugin dependency not satisfied - container_management_labels requires container_management"
-  end
-  
   # define a default set of fields
   # used as a default and as a check against the fields set in config.rb
   label_default = [

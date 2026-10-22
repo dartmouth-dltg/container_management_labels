@@ -2,7 +2,7 @@ Container Management Label Plugin
 ================================
 
 ArchivesSpace plugin to add the ability to print labels within the browser to ArchivesSpace.
-It is compatible with ArchivesSpace v1.5.1+ (See different releases for different versions)
+This branch (`fix-4.2`) is written and reviewed against ArchivesSpace v4.2.1. See other branches/releases for older versions.
 
 ## Note
 
@@ -39,6 +39,18 @@ Note that this plugin overrides two core views files
     /frontend/views/top_containers/bulk_operations/_toolbar.html.erb
     
 If you have other plugins that override these same files, you will need to reconcile the two.
+
+The Print Labels action uses jQuery 3 (`assets/jquery3.js`, bundled with ArchivesSpace core) in the print window.
+
+### Indicator search
+
+The plugin adds an **Indicator** field to the Manage Top Containers search. It accepts a space separated
+list (`1 2 5`) or a numeric range (`[1 TO 10]`, expanded to at most 1000 indicators). It is combined with
+any keyword search as `(keyword) AND (indicator matches)`.
+
+The search queries the Solr field `indicator_u_stext`, which is **not** indexed by ArchivesSpace core. It is
+provided by the `box_search` plugin's indexer, so `box_search` must be enabled (and top containers reindexed)
+for the indicator search to return results.
      
 ## Configuring & Modifying
 
