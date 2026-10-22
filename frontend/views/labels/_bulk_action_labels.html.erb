@@ -37,8 +37,12 @@
     </div>
 
     <script type="text/javascript">
-      var barcodeType = "<%= params['barcode_type'] %>";
-      var autoScale = "<%= params['auto-scale'] %>";
+      $(function() {
+        new LabelScale({
+          barcodeType: <%= raw json_escape(params['barcode_type'].to_s.to_json) %>,
+          autoScale: <%= params['auto-scale'] == 'true' %>
+        });
+      });
     </script>
     <style type="text/css">
         @page {
