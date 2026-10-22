@@ -86,7 +86,7 @@ class LabelData
           # we should end up with an array that looks like: ["Box 1", "File 2", Item 3"] or ["{FILE_TITLE}"]
           
           if ao["type2"].nil?
-            ao["type2"] = ao["title"]
+            sc_ind.push(ao["ao_title"]) unless ao["ao_title"].nil?
           else
             unless ao["indicator2"].nil?
               sc_ind.push(ao["type2"].capitalize + " " + ao["indicator2"])
@@ -125,11 +125,13 @@ class LabelData
   # returns an agent name if a creator exists for the colelction linked to the top container
   def agent_for_top_container(tc)
     agent_names = []
+    return '' if tc['collection'].empty?
+
     # resolve the linked agents
-    URIResolver.resolve_references(tc['collection'],['linked_agents'])
-    
+    collection = URIResolver.resolve_references(tc['collection'],['linked_agents'])
+
     #find the first creator and set the name if there is one
-    agent_ref = tc['collection'][0]['_resolved']['linked_agents'].select{|a| a['role'] == 'creator'}
+    agent_ref = (collection[0]['_resolved'] || {}).fetch('linked_agents', []).select{|a| a['role'] == 'creator'}
     agent_ref.each do |agent|
       agent_names << agent['_resolved']['title']
     end
