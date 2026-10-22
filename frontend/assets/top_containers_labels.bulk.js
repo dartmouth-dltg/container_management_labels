@@ -21,6 +21,7 @@ class BulkActionPrintLabels {
     });
 
     AS.openCustomModal("bulkActionModal", this.$menuItem.text(), dialogContent, "full");
+    new PrintLabelCheckboxesSetup();
   }
 }
 

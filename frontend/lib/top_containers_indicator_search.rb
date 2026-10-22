@@ -7,20 +7,31 @@ module TopContainersIndicatorSearch
   MAX_INDICATORS = 1000
   RANGE = /\A\s*\[?\s*(\d+)\s+TO\s+(\d+)\s*\]?\s*\z/i
 
+  # core's csv export builds its query from the request params without going
+  # through perform_search, so add the indicator filter here too
+  def index
+    add_indicator_query if request.format.csv?
+    super
+  end
+
   private
 
   def perform_search
-    unless params[:indicator].blank?
-      clause = indicator_clause(params[:indicator])
-      params[:q] = params[:q].blank? ? clause : "(#{params[:q]}) AND #{clause}"
-    end
-
+    add_indicator_query
     super
+  end
+
+  def add_indicator_query
+    return if params[:indicator].blank?
+
+    clause = indicator_clause(params[:indicator])
+    params[:q] = params[:q].blank? ? clause : "(#{params[:q]}) AND #{clause}"
   end
 
   def indicator_clause(input)
     indicators = if (m = RANGE.match(input))
-                   (m[1].to_i..m[2].to_i).first(MAX_INDICATORS).map(&:to_s)
+                   from, to = [m[1].to_i, m[2].to_i].minmax
+                   (from..to).first(MAX_INDICATORS).map(&:to_s)
                  else
                    input.split.first(MAX_INDICATORS)
                  end
