@@ -10,8 +10,10 @@ function labelScale() {
 	this.BARCODE_SELECTOR = "[class$=barcode]";
 	this.LABEL_SCALE_SELECTOR = ".label-scaled";
 
-	this.isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
-	this.isSafari = navigator.userAgent.toLowerCase().indexOf("safari") > -1;
+	// chrome's user agent also contains "safari", so exclude it
+	var ua = navigator.userAgent.toLowerCase();
+	this.isChrome = ua.indexOf("chrome") > -1;
+	this.isSafari = ua.indexOf("safari") > -1 && !this.isChrome;
 	this.BARCODE_HEIGHT = 30;
 	
 	this.barcodeType();
@@ -68,7 +70,7 @@ labelScale.prototype.scaleLabelFonts = function() {
 			
 			// scale the barcode stripes, but not the actual text
 			$(self.BARCODE_SELECTOR).children("div").each( function () {
-				if (!$(this).text().length > 0) {
+				if ($(this).text().length === 0) {
 					self.LabelSetCSS($(this),"height");
 				}
 			});
@@ -82,7 +84,7 @@ labelScale.prototype.LabelSetCSS = function(el,attr) {
 	$(el).css(attr, $(el).css(attr).replace("px","")*self.scale+"px");
 }
 
-$().ready( function() {
+$(function() {
 	new labelScale();
 });
     

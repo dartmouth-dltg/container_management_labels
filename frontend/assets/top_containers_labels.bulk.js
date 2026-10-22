@@ -28,10 +28,10 @@ BulkActionPrintLabels.prototype.setup_menu_item = function() {
 BulkActionPrintLabels.prototype.show = function() {
 
   var dialog_content = AS.renderTemplate("labels_bulk_action_print_labels", {
-    selection: bulkContainerLabels.get_selection()
+    selection: this.bulkContainerLabels.get_selection()
   });
 
-  var $modal = AS.openCustomModal("bulkActionModal", this.$menuItem[0].text, dialog_content, 'full');
+  var $modal = AS.openCustomModal("bulkActionModal", this.$menuItem.text(), dialog_content, 'full');
 };
 
 /***************************************************************************
@@ -39,13 +39,13 @@ BulkActionPrintLabels.prototype.show = function() {
  *
  */
 $(function() {
- if (typeof BulkContainerSearch == 'function') {
-		bulkContainerLabels = Object.create(BulkContainerSearch.prototype);
-		
-		bulkContainerLabels.$search_form = $('#bulk_operation_form');
-		bulkContainerLabels.$results_container = $('#bulk_operation_results');
-		bulkContainerLabels.$toolbar = $('.record-toolbar.bulk-operation-toolbar');
-		
-		new BulkActionPrintLabels(bulkContainerLabels);
-		}
+  if (typeof BulkContainerSearch == 'function') {
+    var bulkContainerLabels = Object.create(BulkContainerSearch.prototype);
+
+    bulkContainerLabels.$search_form = $('#bulk_operation_form');
+    bulkContainerLabels.$results_container = $('#bulk_operation_results');
+    bulkContainerLabels.$toolbar = $('.record-toolbar.bulk-operation-toolbar');
+
+    new BulkActionPrintLabels(bulkContainerLabels);
+  }
 });

@@ -38,6 +38,6 @@ printLabelCheckboxesSetup.prototype.barcodeControl = function(control) {
 	else self.barcodeTypeSelector.prop("disabled", false);
 }
 
-$().ready( function() {
+$(function() {
 	new printLabelCheckboxesSetup();
 });
