@@ -4,7 +4,8 @@ class LabelData
   include JSONModel
 
   def initialize(uris)
-    @ids = uris.map {|uri| JSONModel(:top_container).id_for(uri)}.uniq
+    # malformed uris become nil (rather than raising) so they are reported as not found
+    @ids = uris.map {|uri| JSONModel(:top_container).id_for(uri, {}, true)}.uniq
   end
 
   # built on demand so each endpoint only does the work it needs
