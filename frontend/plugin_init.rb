@@ -1,5 +1,11 @@
 ArchivesSpace::Application.extend_aspace_routes(File.join(File.dirname(__FILE__), "routes.rb"))
 
+require_relative 'lib/top_containers_indicator_search'
+
+Rails.application.config.to_prepare do
+  TopContainersController.prepend(TopContainersIndicatorSearch)
+end
+
 Rails.application.config.after_initialize do
   
   begin
