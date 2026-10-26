@@ -3,7 +3,10 @@
     <title><%= I18n.t("top_container_labels._frontend.bulk_operations.label_page_title") %></title>
     <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/container_labels_reset.css" %>" media="all" rel="stylesheet" type="text/css"/>
     <link href="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/container_labels.css" %>" media="all" rel="stylesheet" type="text/css"/>
-    <script src="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/jquery3.js" %>" type="text/javascript"></script>
+    <script>
+      APP_PATH = "<%= j(AppConfig[:frontend_proxy_prefix]) %>";
+    </script>
+    <%= javascript_include_tag "application" %>
     <script src="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/jquery-barcode.min.js" %>" type="text/javascript"></script>
     <script src="<%= "#{AppConfig[:frontend_proxy_prefix]}assets/container_labels.js" %>" type="text/javascript"></script>
   </head>
