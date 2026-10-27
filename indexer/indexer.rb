@@ -1,6 +1,5 @@
 # Index top container indicators into indicator_u_stext for the indicator search
 # added to the top container bulk operations. Core only indexes indicator_u_icusort.
-# The box_search plugin searches this field too and relies on this plugin to index it.
 class IndexerCommon
 
   add_indexer_initialize_hook do |indexer|
