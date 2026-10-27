@@ -50,8 +50,8 @@ any keyword search as `(keyword) AND (indicator matches)`.
 
 The search queries the Solr field `indicator_u_stext`, which is **not** indexed by ArchivesSpace core. The plugin's
 indexer (`indexer/indexer.rb`) adds it, so top containers must be reindexed after installing the plugin before the
-indicator search returns results. The indexed values match those from the `box_search` plugin, so both plugins can
-be enabled together.
+indicator search returns results. The `box_search` plugin searches the same field and relies on this plugin to index
+it.
      
 ## Configuring & Modifying
 
