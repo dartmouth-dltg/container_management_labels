@@ -180,6 +180,11 @@ The translations for each label are defined here. Note the hyphen in the label n
             labels:
               label_type_dymo-30256: Dymo-30256
 
+### Asset Cache Busting
+
+The plugin's css and javascript files are loaded with a query string derived from an MD5 hash of
+their contents (computed on startup), so browsers only fetch new copies when the files change.
+
 ## Fields/Data Displayed
 
 The labels will display the following fields 

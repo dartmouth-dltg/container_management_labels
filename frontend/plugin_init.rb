@@ -1,3 +1,5 @@
+require 'digest'
+
 ArchivesSpace::Application.extend_aspace_routes(File.join(File.dirname(__FILE__), "routes.rb"))
 
 require_relative 'lib/top_containers_indicator_search'
@@ -68,6 +70,13 @@ Rails.application.config.after_initialize do
     AppConfig[:container_management_labels_print_levels] = ["file"]
   end
   
+  # cache busting: version the plugin's css/js by content so the query string
+  # only changes when the files do (and is the same on every node)
+  AppConfig[:container_management_labels_asset_version] =
+    Digest::MD5.hexdigest(
+      Dir[File.join(File.dirname(__FILE__), "assets", "*.{css,js}")].sort.map {|f| File.read(f)}.join
+    )[0, 12]
+
   # add the default page sizing in any case
   AppConfig[:container_management_labels_pagesize]['default'] = {"size" => "letter", "margin" => "0.25in"}
 
