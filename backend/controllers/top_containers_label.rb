@@ -3,7 +3,7 @@ class ArchivesSpaceService < Sinatra::Base
   .description("Bulk label data")
   .params(["record_uris", [String], "A list of container uris"],
           ["repo_id", :repo_id])
-  .permissions([])
+  .permissions([:view_repository])
   .returns([200, "Container data for label printing"]) \
   do
     label_data = LabelData.new(params[:record_uris])
@@ -17,7 +17,7 @@ class ArchivesSpaceService < Sinatra::Base
   .description("Bulk label data")
   .params(["record_uris", [String], "A list of container uris"],
           ["repo_id", :repo_id])
-  .permissions([])
+  .permissions([:view_repository])
   .returns([200, "Container data for label printing"]) \
   do
     label_data = LabelData.new(params[:record_uris])
