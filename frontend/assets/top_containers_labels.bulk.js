@@ -26,16 +26,26 @@ class BulkActionPrintLabels {
 }
 
 /***************************************************************************
- * Initialise the label printing as a child of the BulkContainerSearch class
+ * Add label printing to core's bulk container operations. Core calls
+ * AS.initBulkContainerOperations on the Top Containers page and each time the
+ * Manage Top Containers modal opens on a resource or accession, so hook in there
+ * rather than at page load (the modal's toolbar does not exist yet then).
  */
-$(function() {
-  if (typeof BulkContainerSearch == "function") {
-    const bulkContainerLabels = Object.create(BulkContainerSearch.prototype);
+(function() {
+  if (typeof BulkContainerSearch !== "function" || typeof AS.initBulkContainerOperations !== "function") {
+    return;
+  }
 
-    bulkContainerLabels.$search_form = $("#bulk_operation_form");
-    bulkContainerLabels.$results_container = $("#bulk_operation_results");
-    bulkContainerLabels.$toolbar = $(".record-toolbar.bulk-operation-toolbar");
+  const initBulkContainerOperations = AS.initBulkContainerOperations;
+
+  AS.initBulkContainerOperations = function($form, $results, $toolbar) {
+    initBulkContainerOperations.apply(this, arguments);
+
+    const bulkContainerLabels = Object.create(BulkContainerSearch.prototype);
+    bulkContainerLabels.$search_form = $form;
+    bulkContainerLabels.$results_container = $results;
+    bulkContainerLabels.$toolbar = $toolbar;
 
     new BulkActionPrintLabels(bulkContainerLabels);
-  }
-});
+  };
+})();
